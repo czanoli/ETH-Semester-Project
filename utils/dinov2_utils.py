@@ -20,6 +20,7 @@ from torchinfo import summary
 
 logger: logging.Logger = logging.get_logger()
 
+fit3d_model_names = ["dinov2_base_fine", "dinov2_small_fine", "dinov2_reg_small_fine"]
 
 class DinoFeatureExtractor(nn.Module):
     """DINOv2 feature extractor.
@@ -66,7 +67,7 @@ class DinoFeatureExtractor(nn.Module):
             for item in name_items[1:]:
                 name, value = item.split("=")
                 if name == "version":
-                    self.version = value
+                    self.version = value.replace(":", "_")
                 elif name == "stride":
                     self.stride = int(value)
                 elif name == "facet":
@@ -77,10 +78,15 @@ class DinoFeatureExtractor(nn.Module):
                     self.apply_norm = bool(int(value))
 
         # Build the base model.
-        self.model_base_name: str = f"dinov2_{self.version}".replace("-", "_")
-        self.model: torch.nn.Module = dinov2_backbones.__dict__[self.model_base_name](
-            pretrained=True
-        )
+        if self.version in fit3d_model_names:
+            print("\n!!!! Loading Fit3D Model. The self.version string is:", self.version)
+            print("\n")
+            self.model = torch.hub.load("ywyue/FiT3D", self.version).to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+        else:
+            self.model_base_name: str = f"dinov2_{self.version}".replace("-", "_")
+            self.model: torch.nn.Module = dinov2_backbones.__dict__[self.model_base_name](
+                pretrained=True
+            )
 
         # Load pre-trained weights.
         # path = _DINOV2_BASE_URL + f"{self.model_base_name}_pretrain.pth"
@@ -300,7 +306,10 @@ class DinoFeatureExtractor(nn.Module):
         )
 
         # Remove the CLS token and register tokens.
-        x = x[:, :, (self.model.num_register_tokens + 1) :, :]
+        if self.version in fit3d_model_names:
+            x = x[:, :, 1:, :]
+        else:
+            x = x[:, :, (self.model.num_register_tokens + 1) :, :]
 
         # Bx1xtx(dxh)
         outputs["patch_tokens"] = (

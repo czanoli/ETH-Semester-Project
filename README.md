@@ -7,11 +7,11 @@ This guide is for setting up the necessary environment and infrastructure to run
 ### 1. Generating templates <a name="render-the-templates"></a>
 Now we need to setup the environment to being able to run the first foundpose commands, which generates the templates from a given BOP dataset:
 (on the remote machine):
-- Make the get_bop_data.sh script executable by running: `chmod +x get_bop_data.sh`
-- From the `foundpose` directory, run `./get_bop_data.sh <dataset-acronym>` to get the BOP dataset of interest. Valid `<dataset-acronym>` are: `hot3d`, `hope`, `handal`, `ipd`, `xyzibd`, `itodd`, `itoddmv`, `lm`, `lmo`, `ycbv`, `ruapc`, `tless`, `hb`, `icbin`, `icmi`, `tudl`, `tyol`.
+- Make the get_bop_data.sh script executable by running: `chmod +x scripts/get_bop_data.sh`
+- From the `foundpose` directory, run `./scripts/get_bop_data.sh <dataset-acronym>` to get the BOP dataset of interest. Valid `<dataset-acronym>` are: `hot3d`, `hope`, `handal`, `ipd`, `xyzibd`, `itodd`, `itoddmv`, `lm`, `lmo`, `ycbv`, `ruapc`, `tless`, `hb`, `icbin`, `icmi`, `tudl`, `tyol`.
 - Update the ```output_path``` in the BOP config file located at ```external/bop_toolkit/bop_toolkit_lib/config.py```  to point to the root directory of your BOP datasets.
-- Make the `get_cnos_masks.sh` script executable by running: `chmod +x get_cnos_masks.sh`
-- From the `foundpose` directory, run `./get_cnos_masks.sh` to get the default segmentations created for Task 4 at BOP 2023 Challenge.
+- Make the `get_cnos_masks.sh` script executable by running: `chmod +x scripts/get_cnos_masks.sh`
+- From the `foundpose` directory, run `./scripts/get_cnos_masks.sh` to get the default segmentations created for Task 4 at BOP 2023 Challenge.
 
 Your BOP datasets should be organized in the following directory structure:
 ```bash
@@ -101,3 +101,11 @@ Now, using again `foundpose_gpu` environment, you the can run coarse-level pose 
 python scripts/infer.py --opts-path configs/infer/lmo.json
 ```
 This will generate output poses in the BOP format.
+
+### DINOv2 Checkpoints <a name="dino-checkpoints"></a>
+Download the DINOv2 checkpoints from 3DFiT:
+- `chmod +x scripts/get_dino_checkpoints.sh`
+- `./scripts/get_dino_checkpoints.sh`
+
+The DINOv2 checkpoints from [FiT3D](https://huggingface.co/yuanwenyue/FiT3D/tree/main) will be saved into the `dino_checkpoints` folder.
+
