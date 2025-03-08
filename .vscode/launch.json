@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: gen_repre",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "scripts/gen_repre.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--opts-path",
+                "configs/gen_repre/lmo_fit3d.json"
+            ]
+        },
+        {
+            "name": "Python Debugger: infer",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "scripts/infer.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--opts-path",
+                "configs/infer/lmo_fit3d.json"
+            ]
+        }
+    ]
+}

@@ -14,8 +14,8 @@ logger: logging.Logger = logging.get_logger()
 
 # Load the estimated poses from the json file
 object_dataset = "lmo"
-version = "v1"
-object_lids = None
+version = "fit3d"
+object_lids = [1, 5, 6, 8, 9, 10, 11, 12]
 
 signature = misc.slugify(object_dataset) + "_{}".format(version)
 output_dir = os.path.join(
@@ -91,7 +91,7 @@ for object_lid in object_lids:
             )
         )
 
-bop_path = os.path.join(output_dir, f"coarse_{object_dataset}-estimated-poses.csv")
+bop_path = os.path.join(output_dir, f"coarse_{object_dataset}-test.csv")
 logger.info("Saving BOP submission file to: {}".format(bop_path))
 with open(bop_path, "wb") as f:
     f.write("\n".join(lines).encode("utf-8"))

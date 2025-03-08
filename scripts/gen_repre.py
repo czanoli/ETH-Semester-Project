@@ -75,6 +75,10 @@ def generate_raw_repre(
 
     logger = logging.get_logger(level=logging.INFO if opts.debug else logging.WARNING)
 
+    logger.info("GenRepreOpts:")
+    for field_name, field_value in opts._asdict().items():
+        logger.info(f"  {field_name}: {field_value}")
+
     # Prepare a timer.
     timer = misc.Timer(enabled=debug)
 
@@ -111,6 +115,7 @@ def generate_raw_repre(
 
         timer.start()
 
+        # --- Start preparing everything needed for the feature extraction and 3D registration process, which happens next in the pipeline.
         camera_sample = data_sample["cameras"]
         camera_world_from_cam = PinholePlaneCameraModel(
                 width=camera_sample["ImageSizeX"],
@@ -156,11 +161,16 @@ def generate_raw_repre(
             .to(device)
         )
         T_model_from_camera = torch.matmul(T_model_from_world, T_world_from_camera)
+        # --- End preparation
 
         timer.elapsed("Time for getting template data")
         timer.start()
 
         # Extract features from the current template.
+        '''
+        Heart of transforming 2D image data into a 3D feature representation. 
+        It extracts deep features from the image and ties each feature to its corresponding 3D point on the object.
+        '''
         (
             feat_vectors,
             feat_to_vertex_ids,
@@ -246,6 +256,7 @@ def generate_repre(
 
     # Prepare a feature extractor.
     if extractor is None:
+        print("\n !!! opts.extractor_name in generate_repre() is: ", opts.extractor_name)
         extractor = feature_util.make_feature_extractor(opts.extractor_name)
     extractor.to(device)
 
@@ -387,6 +398,10 @@ def generate_repre_from_list(opts: GenRepreOpts) -> None:
 
     # Prepare a feature extractor.
     extractor = feature_util.make_feature_extractor(opts.extractor_name)
+
+    print("GenRepreOpts:")
+    for field_name, field_value in opts._asdict().items():
+       print(f"  {field_name}: {field_value}")
 
     # Prepare a device.
     device = "cuda" if torch.cuda.is_available() else "cpu"

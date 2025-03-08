@@ -17,6 +17,7 @@ logger: logging.Logger = logging.get_logger()
 def make_feature_extractor(model_name: str) -> torch.nn.Module:
 
     if model_name.startswith("dinov2_"):
+        print("\n !!! model_name in make_feature_extractor:", model_name)
         return dinov2_utils.DinoFeatureExtractor(model_name=model_name)
     else:
         raise NotImplementedError(model_name)

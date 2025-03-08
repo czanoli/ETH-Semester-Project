@@ -83,6 +83,8 @@ class DinoFeatureExtractor(nn.Module):
             print("\n")
             self.model = torch.hub.load("ywyue/FiT3D", self.version).to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
         else:
+            print("\n!!!! Loading vanilla DINOv2 Model. The self.version string is:", self.version)
+            print("\n")
             self.model_base_name: str = f"dinov2_{self.version}".replace("-", "_")
             self.model: torch.nn.Module = dinov2_backbones.__dict__[self.model_base_name](
                 pretrained=True

@@ -108,6 +108,10 @@ def infer(opts: InferOpts) -> None:
     timer = misc_util.Timer(enabled=opts.debug)
     timer.start()
 
+    logger.info("infer() GenRepreOpts:")
+    for field_name, field_value in opts._asdict().items():
+        logger.info(f"  {field_name}: {field_value}")
+
     # Load pre-generated detections saved in the BOP format.
     detections = {}
     if opts.use_detections:
@@ -122,6 +126,7 @@ def infer(opts: InferOpts) -> None:
 
 
     # Prepare feature extractor.
+    print("\n !!! The opts.extractor_name in infer() is: ", opts.extractor_name)
     extractor = feature_util.make_feature_extractor(opts.extractor_name)
     # Prepare a device.
     device = "cuda" if torch.cuda.is_available() else "cpu"
