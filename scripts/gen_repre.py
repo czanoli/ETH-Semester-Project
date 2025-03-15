@@ -8,6 +8,7 @@ import logging
 from typing import Any, Dict, List, NamedTuple, Optional
 
 import torch
+import torch.nn.functional as F
 
 from utils.misc import array_to_tensor
 
@@ -135,6 +136,17 @@ def generate_raw_repre(
         mask_image_arr = inout.load_im(mask_path)
 
         image_chw = array_to_tensor(image_arr).to(torch.float32).permute(2,0,1).to(device) / 255.0
+
+        '''
+        if opts.extractor_name.startswith("crocov2_"):
+            image_chw = F.interpolate(
+                image_chw.unsqueeze(0),
+                size=(224, 224),
+                mode="bilinear",
+                align_corners=False
+            ).squeeze(0)
+        '''
+        
         depth_image_hw = array_to_tensor(depth_image_arr).to(torch.float32).to(device)
         object_mask_modal = array_to_tensor(mask_image_arr).to(torch.float32).to(device)
 

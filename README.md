@@ -102,6 +102,49 @@ python scripts/infer.py --opts-path configs/infer/lmo.json
 ```
 This will generate output poses in the BOP format.
 
+### 4. Evaluation <a name="pose-evaluation"></a>
+Open the `prepare_bop_submission.py` and modify the following fields to match the following data based on the evaluation you need to run. For example:
+
+```python
+object_dataset = "lmo"
+version = "fit3d"
+object_lids = [1, 5, 6, 8, 9, 10, 11, 12]
+```
+
+Run `python scripts/prepare_bop_submission.py` and this will save a `.csv` file into `/bop_datasets/inference/<dataset_method>` (e.g. `/bop_datasets/inference/lmo_fit3d`). This `.csv` file is needed for the automatic computation of the BOP challenge evaluation metric, i.e. AR = (AR_VSD + AR_MSSD + AR_MSPD)/3. In the following command replace `NAME_OF_CSV_WITH_RESULTS` with the name of the generated `.csv` file, for example: `coarse_lmo-test.csv`.
+
+In `external/bop_toolkit/bop_toolkit_lib/config.py` modify the following two lines sch that the last part of the path is referred to the method for which you want to evaluate the poses. For example here we have `lmo_fit3d`, but coould be `lmo_v1`, `lmo_crocov2`, etc...
+
+```python
+
+# Folder with pose results to be evaluated.
+results_path = r"/home/tatiana/chris-sem-prj/foundpose/bop_datasets/inference/lmo_fit3d/"
+
+# Folder for the calculated pose errors and performance scores.
+eval_path = r"/home/tatiana/chris-sem-prj/foundpose/bop_datasets/inference/lmo_fit3d/"
+```
+
+Note: perform the following command in the terminal of the xfce desktop, because you need and EGL renderer for making it running, so if you run the following command in a terminal that is not inside the xfce desktop created using VNC server, it will complain with the folllwing error:
+
+```bash
+RuntimeError: Could not import backend "EGL":
+...
+FileNotFoundError: [Errno 2] No such file or directory: '/home/tatiana/chris-sem-prj/foundpose/bop_datasets/inference/lmo_v1/tmp1742033686/worker_0.json'
+Traceback (most recent call last):
+  File "/home/tatiana/chris-sem-prj/foundpose/external/bop_toolkit/scripts/eval_bop19_pose.py", line 186, in <module>
+    raise RuntimeError("Calculation of pose errors failed.")
+RuntimeError: Calculation of pose errors failed.
+```
+
+So, with the foundpose_gpu conda env activated and inside the terminal of the remote desktop env, you can now run: 
+```
+python external/bop_toolkit/scripts/eval_bop19_pose.py --renderer_type=vispy --result_filenames=coarse_lmo-test.csv
+```
+
+Note: It's important to have the foundpose_gpu conda env activated otherwise you will get some Module Not Found errors (you need the env_vars.sh you modified before)
+
+
+## [OLD:]
 ### DINOv2 Checkpoints <a name="dino-checkpoints"></a>
 Download the DINOv2 checkpoints from 3DFiT:
 - `chmod +x scripts/get_dino_checkpoints.sh`

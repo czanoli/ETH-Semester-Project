@@ -1,2 +1,3 @@
 bop_datasets/
-dino_checkpoints/
+fit3d_dino_checkpoints/
+crocov2_pretrained_models/

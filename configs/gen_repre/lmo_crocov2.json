@@ -1,0 +1,17 @@
+{
+    "gen_repre_opts": {
+        "version": "crocov2",
+        "templates_version": "v1",
+        "object_dataset": "lmo",
+        "object_lids": [1,5,6,8,9,10,11,12],
+        "extractor_name": "crocov2_CroCo_V2_ViTBase_BaseDecoder",
+        "grid_cell_size": 14.0,
+        "apply_pca": true,
+        "pca_components": 256,
+        "cluster_features": true,
+        "cluster_num": 2048,
+        "template_desc_opts": {
+            "desc_type": "tfidf"
+        }
+    }
+}

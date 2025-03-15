@@ -1,0 +1,4 @@
+- Occhio al layer number: usa il numero 9 attualmente [credo sia ok, anche se il layer 18 era il migliore]
+- Occhio alla versione di DINOv2, attualmente i risultati hanno usato vits14-reg invece dovresti usate vitb14 dal moento in cui il fit3d infused usa dinov2:base:fine
+    -- Ri runna la pipeline con lmo vanilla assicurandoti che sia il lmo.json del gen_repre.py che dell' infer.py abbia: "extractor_name": "dinov2_version=vitb14_stride=14_facet=token_layer=9_logbin=0_norm=1",
+- [!!!] Occhio che attualmente croco non sputa fuori i feature descriptors dal layer 9 ma dall'ultimo
