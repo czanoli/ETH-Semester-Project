@@ -9,7 +9,7 @@
             420
         ],
         "use_detections": true,
-        "extractor_name": "crocov2_CroCo_V2_ViTBase_BaseDecoder",
+        "extractor_name": "crocov2_CroCo_V2_ViTBase_BaseDecoder_layer=9",
         "grid_cell_size": 14.0,
         "match_template_type": "tfidf",
         "match_top_n_templates": 5,

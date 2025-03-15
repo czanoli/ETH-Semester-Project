@@ -8,10 +8,10 @@ This guide is for setting up the necessary environment and infrastructure to run
 Now we need to setup the environment to being able to run the first foundpose commands, which generates the templates from a given BOP dataset:
 (on the remote machine):
 - Make the get_bop_data.sh script executable by running: `chmod +x scripts/get_bop_data.sh`
-- From the `foundpose` directory, run `./scripts/get_bop_data.sh <dataset-acronym>` to get the BOP dataset of interest. Valid `<dataset-acronym>` are: `hot3d`, `hope`, `handal`, `ipd`, `xyzibd`, `itodd`, `itoddmv`, `lm`, `lmo`, `ycbv`, `ruapc`, `tless`, `hb`, `icbin`, `icmi`, `tudl`, `tyol`.
+- From the `root` directory, run `./scripts/get_bop_data.sh <dataset-acronym>` to get the BOP dataset of interest. Valid `<dataset-acronym>` are: `hot3d`, `hope`, `handal`, `ipd`, `xyzibd`, `itodd`, `itoddmv`, `lm`, `lmo`, `ycbv`, `ruapc`, `tless`, `hb`, `icbin`, `icmi`, `tudl`, `tyol`.
 - Update the ```output_path``` in the BOP config file located at ```external/bop_toolkit/bop_toolkit_lib/config.py```  to point to the root directory of your BOP datasets.
 - Make the `get_cnos_masks.sh` script executable by running: `chmod +x scripts/get_cnos_masks.sh`
-- From the `foundpose` directory, run `./scripts/get_cnos_masks.sh` to get the default segmentations created for Task 4 at BOP 2023 Challenge.
+- From the `root` directory, run `./scripts/get_cnos_masks.sh` to get the default segmentations created for Task 4 at BOP 2023 Challenge.
 
 Your BOP datasets should be organized in the following directory structure:
 ```bash
@@ -47,13 +47,13 @@ Edit the ```env_vars.sh``` file as follows:
 ```bash
 #!/bin/sh
 
-export REPO_PATH=/path/to/foundpose/repository  # Replace with the path to foundpose.
+export REPO_PATH=/path/to/project/repository  # Replace with the path to the project (root).
 export BOP_PATH=/path/to/bop/datasets  # Replace with the path to BOP datasets created before.
 
 export PYTHONPATH=$REPO_PATH:$REPO_PATH/external/bop_toolkit:$REPO_PATH/external/dinov2
 ```
 
-Finally, activate the conda environment. This environment will be used to run the forst foundpose command, to generate object templates:
+Finally, activate the conda environment. This environment will be used to run the first foundpose command, to generate object templates:
 ```bash
 conda activate foundpose_cpu
 ```
@@ -83,7 +83,7 @@ Edit the ```env_vars.sh``` file as follows:
 ```bash
 #!/bin/sh
 
-export REPO_PATH=/path/to/foundpose/repository  # Replace with the path to foundpose.
+export REPO_PATH=/path/to/project/repository  # Replace with the path to the project (root).
 export BOP_PATH=/path/to/bop/datasets  # Replace with the path to BOP datasets created before.
 
 export PYTHONPATH=$REPO_PATH:$REPO_PATH/external/bop_toolkit:$REPO_PATH/external/dinov2
@@ -118,10 +118,10 @@ In `external/bop_toolkit/bop_toolkit_lib/config.py` modify the following two lin
 ```python
 
 # Folder with pose results to be evaluated.
-results_path = r"/home/tatiana/chris-sem-prj/foundpose/bop_datasets/inference/lmo_fit3d/"
+results_path = r"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/inference/lmo_fit3d/"
 
 # Folder for the calculated pose errors and performance scores.
-eval_path = r"/home/tatiana/chris-sem-prj/foundpose/bop_datasets/inference/lmo_fit3d/"
+eval_path = r"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/inference/lmo_fit3d/"
 ```
 
 Note: perform the following command in the terminal of the xfce desktop, because you need and EGL renderer for making it running, so if you run the following command in a terminal that is not inside the xfce desktop created using VNC server, it will complain with the folllwing error:
@@ -144,6 +144,14 @@ python external/bop_toolkit/scripts/eval_bop19_pose.py --renderer_type=vispy --r
 Note: It's important to have the foundpose_gpu conda env activated otherwise you will get some Module Not Found errors (you need the env_vars.sh you modified before)
 
 
+### CroCov2 Checkpoints <a name="croco-checkpoints"></a>
+Download the CroCov2 checkpoints:
+- `chmod +x scripts/get_croco_checkpoints.sh`
+- `./scripts/get_croco_checkpoints.sh`
+
+The CroCov2 checkpoints will be saved into the `croco_pretrained_models` folder.
+
+
 ## [OLD:]
 ### DINOv2 Checkpoints <a name="dino-checkpoints"></a>
 Download the DINOv2 checkpoints from 3DFiT:
@@ -151,4 +159,3 @@ Download the DINOv2 checkpoints from 3DFiT:
 - `./scripts/get_dino_checkpoints.sh`
 
 The DINOv2 checkpoints from [FiT3D](https://huggingface.co/yuanwenyue/FiT3D/tree/main) will be saved into the `dino_checkpoints` folder.
-

@@ -3,20 +3,20 @@
 # This script downloads and extracts the FiT3D DINOv2 from Hugging Face.
 #
 # Usage example:
-#   chmod +x get_dino_checkpoints.sh
-#   ./get_dino_checkpoints
+#   chmod +x scripts/get_fit3d_checkpoints.sh
+#   ./scripts/get_fit3d_checkpoints.sh
 #
 # After running, you will have a new folder in:
-#   ./dino_checkpoints
+#   ./fit3d_checkpoints
 # ------------------------------------------------------------------------------
 
 set -e  # Exit immediately if a command exits with a non-zero status
 
-echo "Creating dino_checkpoints folder (if not exists)..."
-mkdir -p dino_checkpoints
+echo "Creating fit3d_checkpoints folder (if not exists)..."
+mkdir -p fit3d_checkpoints
 
-echo "Switching to dino_checkpoints folder..."
-cd dino_checkpoints
+echo "Switching to fit3d_checkpoints folder..."
+cd fit3d_checkpoints
 echo "Now in: $(pwd)"
 
 echo "Downloading archive files for dinov2_base_finetuned..."

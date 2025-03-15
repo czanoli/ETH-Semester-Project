@@ -32,4 +32,9 @@ rm -f bop23_default_detections_for_task4.zip
 rm -rf bop23_default_detections_for_task4
 rm -rf __MACOSX
 
+echo "Renaming files..."
+for file in cnos-fastsam_*.json; do
+    mv "$file" "$(echo "$file" | sed -E 's/_[^_]+\.json$/\.json/')"
+done
+
 echo "CNOS-FastSAM segmentation masks downloaded and placed successfully!"

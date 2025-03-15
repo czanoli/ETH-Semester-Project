@@ -15,15 +15,15 @@ else:
     datasets_path = r"/path/to/bop/datasets"
 
 # Folder with pose results to be evaluated.
-results_path = r"/home/tatiana/chris-sem-prj/foundpose/bop_datasets/inference/lmo_v1/"
+results_path = r"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/inference/lmo_crocov2/"
 
 # Folder for the calculated pose errors and performance scores.
-eval_path = r"/home/tatiana/chris-sem-prj/foundpose/bop_datasets/inference/lmo_v1/"
+eval_path = r"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/inference/lmo_crocov2/"
 
 ######## Extended ########
 
 # Folder for outputs (e.g. visualizations).
-output_path = r"/home/tatiana/chris-sem-prj/foundpose/bop_datasets"
+output_path = r"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets"
 
 # For offscreen C++ rendering: Path to the build folder of bop_renderer (github.com/thodan/bop_renderer).
 bop_renderer_path = r"/path/to/bop_renderer/build"

@@ -3,9 +3,9 @@
 # This script downloads and extracts a BOP dataset from Hugging Face.
 # You must pass the dataset name (e.g., "lmo") as the first argument.
 #
-# Usage example:
-#   chmod +x download_bop_dataset.sh
-#   ./download_bop_dataset.sh lmo
+# Usage example (from project root folder):
+#   chmod +x scripts/get_bop_data.sh
+#   ./scripts/get_bop_data.sh lmo
 #
 # After running, you will have a new folder in:
 #   ./bop_datasets/<DATASET_NAME>

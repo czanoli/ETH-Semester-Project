@@ -280,7 +280,6 @@ for result_filename in p["result_filenames"]:
 
     # Save the final scores.
     final_scores_path = os.path.join(p["eval_path"], result_name, "scores_bop19.json")
-    print("PORCODIOOOOOOO !!!!!!!!!!!!!!")
     logger.info(final_scores_path)
     inout.save_json(final_scores_path, final_scores)
 
