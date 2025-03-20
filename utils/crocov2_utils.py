@@ -59,7 +59,7 @@ class CrocoFeatureExtractor(nn.Module):
 
         # 2) Get patch embeddings
         with torch.no_grad():
-            # out_list is a list of length enc_depth
+            # out_list is a list of length enc_depth (12)
             # out_list[0] is the output after block 0
             # out_list[11] might be the last block (for enc_depth=12)
             out_list, pos, masks = self.model._encode_image(
@@ -73,8 +73,11 @@ class CrocoFeatureExtractor(nn.Module):
             if self.layer_index is None or self.layer_index >= len(out_list):
                 x = out_list[-1]  # final block, normalized by default by the previous self.model._encode_image(...)
             else:
-                x = out_list[self.layer_index]
-                # We need to explicitly normalize this intermediate:
+                print(f" !!!! Getting from CroCov2, output of intermediate layer #{self.layer_index}")
+                x = out_list[self.layer_index-1]
+                # We need to explicitly normalize this intermediate layer.
+                # If we were to get the output of the final layer this would be
+                # automatically normalized, but intermediate layers are not by default.
                 x = self.model.enc_norm(x)
 
         # 3) reshape from (B, N, C) => (B, C, H', W')

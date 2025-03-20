@@ -472,6 +472,8 @@ def infer(opts: InferOpts) -> None:
                 # Extract feature map from the crop.
                 image_tensor_chw = array_to_tensor(image_np_hwc).to(torch.float32).permute(2,0,1).to(device)
                 image_tensor_bchw = image_tensor_chw.unsqueeze(0)
+                
+                # Pass the image through the extractor
                 extractor_output = extractor(image_tensor_bchw)
                 feature_map_chw = extractor_output["feature_maps"][0]
 

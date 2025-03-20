@@ -1,29 +1,17 @@
 #!/usr/bin/env bash
 # ------------------------------------------------------------------------------
-# This script downloads and extracts a BOP dataset from Hugging Face.
-# You must pass the dataset name (e.g., "lmo") as the first argument.
+# This script downloads and extracts the lmo BOP dataset from Hugging Face.
 #
 # Usage example (from project root folder):
-#   chmod +x scripts/get_bop_data.sh
-#   ./scripts/get_bop_data.sh lmo
+#   chmod +x scripts/get_lmo_bop_data.sh
+#   ./scripts/get_lmo_bop_data.sh
 #
 # After running, you will have a new folder in:
-#   ./bop_datasets/<DATASET_NAME>
+#   ./bop_datasets/lmo
 # ------------------------------------------------------------------------------
 
 set -e  # Exit immediately if a command exits with a non-zero status
-
-# --- Capture the dataset name from the 1st argument ---
-DATASET_NAME="$1"
-
-# Check that the dataset name was given
-if [ -z "${DATASET_NAME}" ]; then
-  echo "Error: No dataset name specified."
-  echo "Usage: $0 <DATASET_NAME>"
-  echo "Example: $0 lmo"
-  exit 1
-fi
-
+DATASET_NAME = "lmo"
 echo "Dataset name: ${DATASET_NAME}"
 
 # Make a folder for all BOP datasets if it doesn't exist
@@ -41,7 +29,7 @@ echo "Download source: ${SRC}"
 echo "Downloading archive files for '${DATASET_NAME}' dataset..."
 wget "${SRC}/${DATASET_NAME}_base.zip"
 wget "${SRC}/${DATASET_NAME}_models.zip"
-wget "${SRC}/${DATASET_NAME}_test_all.zip"
+wget "${SRC}/${DATASET_NAME}_test_bop19.zip"
 
 echo "Unzipping ${DATASET_NAME}_base.zip..."
 unzip -q "${DATASET_NAME}_base.zip"
@@ -49,8 +37,8 @@ unzip -q "${DATASET_NAME}_base.zip"
 echo "Unzipping ${DATASET_NAME}_models.zip to '${DATASET_NAME}' folder..."
 unzip -q "${DATASET_NAME}_models.zip" -d "${DATASET_NAME}"
 
-echo "Unzipping ${DATASET_NAME}_test_all.zip to '${DATASET_NAME}' folder..."
-unzip -q "${DATASET_NAME}_test_all.zip" -d "${DATASET_NAME}"
+echo "Unzipping ${DATASET_NAME}_test_bop19.zip to '${DATASET_NAME}' folder..."
+unzip -q "${DATASET_NAME}_test_bop19.zip" -d "${DATASET_NAME}"
 
 echo "Removing leftover zip files..."
 rm -f *.zip

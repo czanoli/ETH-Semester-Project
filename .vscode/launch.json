@@ -9,8 +9,14 @@
             "console": "integratedTerminal",
             "args": [
                 "--opts-path",
-                "configs/gen_repre/lmo_fit3d.json"
-            ]
+                "configs/gen_repre/lmo_crocov2.json"
+            ],
+            "python": "/home/tatiana/anaconda3/envs/foundpose_gpu/bin/python",
+            "env":{
+                "REPO_PATH": "/home/tatiana/chris-sem-prj/ETH-Semester-Project",
+                "BOP_PATH": "/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets",
+                "PYTHONPATH": "${workspaceFolder}/scripts:${workspaceFolder}/external/bop_toolkit:${workspaceFolder}/external/dinov2:${workspaceFolder}/external/crocov2:${env:PYTHONPATH}"
+            }
         },
         {
             "name": "Python Debugger: infer",
@@ -21,7 +27,8 @@
             "args": [
                 "--opts-path",
                 "configs/infer/lmo_fit3d.json"
-            ]
+            ],
+            "python": "/home/tatiana/anaconda3/envs/foundpose_gpu/bin/python",
         }
     ]
 }

@@ -6,13 +6,11 @@
 # CroCo model during pretraining
 # --------------------------------------------------------
 
-
-
 import torch
+import torch.nn.functional as F
 import torch.nn as nn
 torch.backends.cuda.matmul.allow_tf32 = True # for gpu >= Ampere and pytorch >= 1.12
 from functools import partial
-
 from models.blocks import Block, DecoderBlock, PatchEmbed
 from models.pos_embed import get_2d_sincos_pos_embed, RoPE2D 
 from models.masking import RandomMask
@@ -45,8 +43,6 @@ class CroCoNet(nn.Module):
         self._set_mask_generator(self.patch_embed.num_patches, mask_ratio)
 
         self.pos_embed = pos_embed
-        print("pos_embed")
-        print(self.pos_embed)
         if pos_embed=='cosine':
             # positional embedding of the encoder 
             enc_pos_embed = get_2d_sincos_pos_embed(enc_embed_dim, self.patch_embed.grid_size, n_cls_token=0)
@@ -84,7 +80,7 @@ class CroCoNet(nn.Module):
         
         # initializer weights
         self.initialize_weights()           
-
+    
     def _set_patch_embed(self, img_size=224, patch_size=16, enc_embed_dim=768):
         self.patch_embed = PatchEmbed(img_size, patch_size, 3, enc_embed_dim)
 
@@ -135,16 +131,30 @@ class CroCoNet(nn.Module):
         return_all_blocks: if True, return the features at the end of every block 
                            instead of just the features from the last block (eg for some prediction heads)
         """
-        # embed the image into patches  (x has size B x Npatches x C) 
-        # and get position if each return patch (pos has size B x Npatches x 2)
-        x, pos = self.patch_embed(image)              
-        # add positional embedding without cls token 
-        print("enc_pos_embed")
-        print(self.enc_pos_embed)
-        print(type(self.enc_pos_embed))
-        print("diocane")
-        if self.enc_pos_embed is not None: 
-            x = x + self.enc_pos_embed[None,...]
+        x, pos = self.patch_embed(image)  # x => [B, N, C]
+
+        # if we have a sine/cosine embedding:
+        if self.enc_pos_embed is not None and self.rope is None:
+            # e.g., pos_embed='cosine'
+            B, N, C = x.shape
+
+            # Suppose the input is square => new_h = new_w = int(N**0.5)
+            # (If your input might be rectangular, see note below.)
+            new_h = new_w = int(N ** 0.5)
+            assert new_h * new_w == N, f"Non-square input or patch grid? N={N}"
+
+            enc_pos_embed_interp = self._interpolate_cosine_enc_pos_embed(self.enc_pos_embed, new_h, new_w)
+            # shape => [N, C]
+
+            # Now we can do x + the new embedding (broadcast over B):
+            # x => [B, N, C], enc_pos_embed_interp => [N, C]
+            x = x + enc_pos_embed_interp.unsqueeze(0)
+
+        elif self.enc_pos_embed is not None and self.rope is not None:
+            # pos_embed='RoPE...' => we do nothing special here, because
+            # we handle positional embedding inside the transformer blocks
+            pass
+        
         # apply masking 
         B,N,C = x.size()
         if do_mask:
