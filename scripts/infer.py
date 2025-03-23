@@ -400,6 +400,10 @@ def infer(opts: InferOpts) -> None:
                     pose_evaluator.detection_times[(bop_chunk_id, bop_im_id)] = 0
 
                 # Get the input image.
+                # debug
+                #from PIL import Image
+                #img_pil = Image.fromarray(sample.image)
+                #img_pil.save('/home/tatiana/chris-sem-prj/ETH-Semester-Project/infer.png')
                 orig_image_np_hwc = sample.image.astype(np.float32)/255.0
 
                 # Get the modal mask and amodal bounding box of the instance.
@@ -817,10 +821,10 @@ def infer(opts: InferOpts) -> None:
             logger.info(f"Garbage collection took {time_end - time_start} seconds.")
 
         # Save the pose estimates.
-        if opts.save_estimates:
-            results_path = os.path.join(output_dir, "estimated-poses.json")
-            logger.info("Saving estimated poses to: {}".format(results_path))
-            pose_evaluator.save_results_json(results_path)
+        #if opts.save_estimates:
+            #results_path = os.path.join(output_dir, "estimated-poses.json")
+            #logger.info("Saving estimated poses to: {}".format(results_path))
+            #pose_evaluator.save_results_json(results_path)
 
 
 def main() -> None:

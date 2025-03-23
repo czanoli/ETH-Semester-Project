@@ -78,3 +78,38 @@ So, we need to try potentially:
 - [high priority] Debug step by step infer.py the same way you did for gen_repre.py
 
 - [low priority] Rerun test image gahtering and results (bop1924 not all test images)
+
+
+> Insights from infer.py
+- Yes, KNN is using the "l2" metric and not the "cosine" one.
+- There are two KNNs performed:
+    -- One to match your query features to cluster centroids (i.e., visual words). This is part of the TF-IDF template matching process.
+       This step gives you which templates best match the query image based on word frequency and importance.
+
+    -- One to match individual query descriptors with specific features from each template. Each template has its own index of feature descriptors
+       So instead of finding which template matches, you're now figuring out where in each template the features align with the observed scene.
+
+       Note: both of them are unsing "l2" metric 
+- Is it okay to have:
+len(extractor_output["feature_maps"][0])
+768
+len(extractor_output["feature_maps"][0][0])
+26
+in infer.py line, 482
+
+- Riga 516:
+# Potentially project features to a PCA space.
+                if (
+                    query_features.shape[1] != repre.feat_vectors.shape[1]
+                    and len(repre.feat_raw_projectors) != 0
+                ):
+                    query_features_proj = projector_util.project_features(
+                        feat_vectors=query_features,
+                        projectors=repre.feat_raw_projectors,
+                    ).contiguous()
+Per il primo risultato:
+query_features.shape[1]
+768
+repre.feat_vectors.shape[1]
+256
+

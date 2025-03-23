@@ -139,10 +139,6 @@ class CroCoNet(nn.Module):
         # and get position if each return patch (pos has size B x Npatches x 2)
         x, pos = self.patch_embed(image)              
         # add positional embedding without cls token 
-        print("enc_pos_embed")
-        print(self.enc_pos_embed)
-        print(type(self.enc_pos_embed))
-        print("diocane")
         if self.enc_pos_embed is not None: 
             x = x + self.enc_pos_embed[None,...]
         # apply masking 

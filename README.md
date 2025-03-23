@@ -113,10 +113,9 @@ object_lids = [1, 5, 6, 8, 9, 10, 11, 12]
 
 Run `python scripts/prepare_bop_submission.py` and this will save a `.csv` file into `/bop_datasets/inference/<dataset_method>` (e.g. `/bop_datasets/inference/lmo_fit3d`). This `.csv` file is needed for the automatic computation of the BOP challenge evaluation metric, i.e. AR = (AR_VSD + AR_MSSD + AR_MSPD)/3. In the following command replace `NAME_OF_CSV_WITH_RESULTS` with the name of the generated `.csv` file, for example: `coarse_lmo-test.csv`.
 
-In `external/bop_toolkit/bop_toolkit_lib/config.py` modify the following two lines sch that the last part of the path is referred to the method for which you want to evaluate the poses. For example here we have `lmo_fit3d`, but coould be `lmo_v1`, `lmo_crocov2`, etc...
+In `external/bop_toolkit/bop_toolkit_lib/config.py` modify the following two lines sch that the last part of the path is referred to the method for which you want to evaluate the poses. For example here we have `lmo_fit3d`, but coould be `lmo_vanilla`, `lmo_crocov2`, etc...
 
 ```python
-
 # Folder with pose results to be evaluated.
 results_path = r"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/inference/lmo_fit3d/"
 
