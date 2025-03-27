@@ -473,6 +473,11 @@ def infer(opts: InferOpts) -> None:
                 times["prep"] = timer.elapsed("Time for preparation")
                 timer.start()
 
+                # debug
+                #from PIL import Image
+                #image_uint8 = (image_np_hwc * 255).astype(np.uint8)
+                #Image.fromarray(image_uint8).save("infer_image_np_hwc.png")
+
                 # Extract feature map from the crop.
                 image_tensor_chw = array_to_tensor(image_np_hwc).to(torch.float32).permute(2,0,1).to(device)
                 image_tensor_bchw = image_tensor_chw.unsqueeze(0)
@@ -532,6 +537,18 @@ def infer(opts: InferOpts) -> None:
                 else:
                     query_features_proj = query_features
                     feature_map_chw_proj = feature_map_chw
+
+                # debug
+                '''
+                from PIL import Image
+                t = vis_util.vis_pca_feature_map(
+                feature_map_chw=feature_map_chw_proj,
+                image_height=420,
+                image_width=420,
+                pca_projector=repre.feat_vis_projectors[0],
+                )
+                Image.fromarray(t).save("infer_feature_map_chw_proj.png")
+                '''
 
                 times["proj"] = timer.elapsed("Time for projection")
                 timer.start()
@@ -821,10 +838,10 @@ def infer(opts: InferOpts) -> None:
             logger.info(f"Garbage collection took {time_end - time_start} seconds.")
 
         # Save the pose estimates.
-        #if opts.save_estimates:
-            #results_path = os.path.join(output_dir, "estimated-poses.json")
-            #logger.info("Saving estimated poses to: {}".format(results_path))
-            #pose_evaluator.save_results_json(results_path)
+        if opts.save_estimates:
+            results_path = os.path.join(output_dir, "estimated-poses.json")
+            logger.info("Saving estimated poses to: {}".format(results_path))
+            pose_evaluator.save_results_json(results_path)
 
 
 def main() -> None:

@@ -201,6 +201,7 @@ def vis_inference_results(
     vis_for_paper: bool = True,
     vis_for_teaser: bool = False,
     extractor: Any = None,
+    debug_croco: Optional[bool] = False
 ):
 
     device = feature_map_chw.device
@@ -264,12 +265,19 @@ def vis_inference_results(
             image_width=image_width,
             pca_projector=object_repre.feat_vis_projectors[0],
         )
+
+        # debug
+        #from PIL import Image
+        #Image.fromarray(query_feat_vis).save("infer_query_feat_vis.png")
+
         template_feat_vis = vis_pca_feature_map(
             feature_map_chw=template_feature_map_chw,
             image_height=image_height,
             image_width=image_width,
             pca_projector=object_repre.feat_vis_projectors[0],
         )
+
+        #Image.fromarray(template_feat_vis).save("infer_template_feat_vis.png")
 
     # ------------------------------------------------------------------------------
     # Row 1: Query image with object poses
@@ -283,12 +291,16 @@ def vis_inference_results(
         mask_3c = np.tile(np.expand_dims(object_mask.astype(np.float32), -1), (1, 1, 3))
         mask_3c_bool = mask_3c.astype(bool)
         if vis_for_paper:
-            vis = np.array(base_image).astype(np.float32)
-            vis[mask_3c_bool] *= 0.5
-            vis[mask_3c_bool] += np.tile(
-                0.5 * np.array(accent_color), (int(np.sum(object_mask)), 1)
-            ).flatten()
-            vis = vis.astype(np.uint8)
+            if debug_croco:
+                vis = np.array(base_image).astype(np.float32)
+                vis = vis.astype(np.uint8)
+            else:
+                vis = np.array(base_image).astype(np.float32)
+                vis[mask_3c_bool] *= 0.5
+                vis[mask_3c_bool] += np.tile(
+                    0.5 * np.array(accent_color), (int(np.sum(object_mask)), 1)
+                ).flatten()
+                vis = vis.astype(np.uint8)
         else:
             vis = np.array(base_image_vis)
             vis[mask_3c_bool] = 0.5 * vis[mask_3c_bool] + 0.5 * 255

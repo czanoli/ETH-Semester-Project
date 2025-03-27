@@ -5,8 +5,8 @@
         "repre_version": "v1",
         "crop_rel_pad": 0.2,
         "crop_size": [
-            420,
-            420
+            224,
+            224
         ],
         "use_detections": true,
         "extractor_name": "crocov2_CroCo_V2_ViTBase_BaseDecoder_layer=9",

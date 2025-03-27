@@ -1,115 +1,51 @@
 - Occhio al layer number: usa il numero 9 attualmente [credo sia ok, anche se il layer 18 era il migliore]
 - Occhio alla versione di DINOv2, attualmente i risultati hanno usato vits14-reg invece dovresti usate vitb14 dal moento in cui il fit3d infused usa dinov2:base:fine
     -- Ri runna la pipeline con lmo vanilla assicurandoti che sia il lmo.json del gen_repre.py che dell' infer.py abbia: "extractor_name": "dinov2_version=vitb14_stride=14_facet=token_layer=9_logbin=0_norm=1",
-- [!!!] Occhio che attualmente croco non sputa fuori i feature descriptors dal layer 9 ma dall'ultimo
-     ---> implementato layer 9 ma risultati fanno schifo... recall di 0.057 ..
+- Rerun test image gahtering and results (bop1924 not all test images) because in foundpose results are referred to those only
+
+- Occhio che per fare il debug hai modificato le json configs nel seguente modo:
+    -- in configs/gen_templates:
+        --- "object_lids": [1]
+        --- "crop_size": [224, 224]
+    -- in configs/gen_repre:
+        --- "object_lids": [1]
+    -- in configs/infer:
+        --- "crop_size": [
+            224,
+            224
+        ]
 
 
+>> Results for debugging strategy 1 and 2:
 
+Query template: 392
 
+Removing []:
+Matched templates: [392 (best), 574, 462, 504, 280]
+MSSD error: 0.07512012856414313, id: 2772
+MSPD error : 0.006183439230107032, id: 5809
 
-[Debugging]:
-- per crocov2 messo in both gen_repre.py e infer.py il loading delle immagini come la demo.py di croco
-    -- TODO: vedere se cambia qualcosa --> ancora peggio
-        --> ho dovuto fare resize 224x224: fa super cagare
-        --> togliendo resize e mettendo solo load immagini come demo.py di croco fa peggio
+Removing [392]:
+Matched templates: [573, 461, 503, 280 (best), 574]
+MSSD error: 69.92804745201619, id: 5607
+MSPD error : 12.334418661111533, id: 5725
 
-[Osservazioni]
-- KNN utils is using "l2" as a metric. Is it okay? Need to double check because euclidean is bad, cosine similarity is okay
-- Secondo me è il template retrieval, possibile che i top x siano completamente sballati??
-- Anche nel vanilla foundpose nell'immagine di sinistra ci sono le features di tutti gli oggetti dell'immagine, non solo la parte segmentata
-- Maybe avoid PCA ? They do apply PCA: the flow is: image --> divided into m patches of size 14x14 --> each patch given to DINov2 as input --> otuput a raw patch descriptor of dimenion raw
-They gather all these for the total of m patches and the apply PCA on all these m patches of that specific template. They do it for efficiency (small decrease in AR while noticeable speedup)
+Removing [392, 280]:
+Matched templates: [572, 460, 502, 573, 403 (best)]
+MSSD error: 295.26353268318144, id: 3249
+MSPD error : 133.11173987033666, id: 118
 
+Removing [392, 280, 403]:
+Matched templates: [571, 459, 501, 572, 402 (best)]
+MSSD error: 401.53918524443833, id: 3248
+MSPD error : 181.12709440539618, id: 268
 
+Removing [392, 280, 403, 402]:
+Matched templates: [570, 458, 500, 571, 401 (best)]
+MSSD error: 439.6859977520146, id: 2767
+MSPD error : 195.7457669219908, id: 143
 
-- In         ) = feature_util.get_visual_features_registered_in_3d(
-            image_chw=image_chw,
-            depth_image_hw=depth_image_hw,
-            object_mask=object_mask_modal,
-            camera=camera_world_from_cam,
-            T_model_from_camera=T_model_from_camera,
-            extractor=extractor,
-            grid_cell_size=opts.grid_cell_size,
-            debug=False,
-        )
-What is opt.grid_cell_size ? (still 14 also in crocov2 but IDK if I should change it)
-what is debug ? to just orint some shit but could be unnecessary
-
-Interesting: can modify the crop size of the template in the config ==> 224x224 ==> no more the error
-==> I should try it with no modifications to crocov2 code (excpet for trying with different layers)
-
-
-
-Questions for nik & fab
-
-1) CroCo uses a ViT-Base encoder (12 blocks, 768-dimensional features, 12 attention heads) and a decoder composed of 8 blocks with 512-dimensional features and 16 heads. 
-   In DINOv2 we use an intermediate layer (for now the 9th) to get the intermediate representation useful for pose estimation. Should I select the 9th block also in the case of croco or should I try out some of them to see which one is better? 
-
-2) CroCo is a ViT, and it uses cosine positional embeddings (or RoPe100 positional embeddings inìf available) but we don0t care about these right? 
-
-
-Nota: ri runna la roba dulle nuove test images, solo 1924 hanno usato in foundpose, spero non cambi niente dal punto di vista dei risultati ma nelle issues hanno detto che nnon hanno usato test all
-Lo script è già stato modificato
-
-- The output of the intermeediate layer of croco are 676 patches, each one with a dimensionality of 768
-==> the patch size is 26 which doesn't match the patch size 16 of the model. This is due to the image input size, 
-which is 420x420 and not 224x224 (if it was 224x224 the result number of patches would be 14). Come cazzo fanno con DINO a risolvere sta cosa??
-
-
-//Insights from gre_repre.py:
-
-[high priority]
-- CroCo wants image input of 224x224. However, also DINOv2 was trained on images 224x224. The difference is that DINOv2 is available
-to handle arbitrary images because (90% sure) it does an interpolation of positional embeddings
-So, we need to try potentially:
-- Keep config generated template size 420x420, remove 2 asserts, inlcude the same positional embeddings interpolation 
-- Keep config generated template size 420x420, remove 2 asserts, no interpolation of positional embeddings
-- Change config generated template size to 224x224, keep asserts, no interpolation
-    --> basically this would use the unmodified croco code. However, 224/16 (16 is the patch size used in croco) ==> 14 patches. In DINO
-    the patch size is 14 ==> 224/14 = 16 patches. Idk if this is a problem but I don't think so
-  - Side note: maybe also worth it to do the same for vanilla foundpose, templates of 224x224 instead of 420x420
-- Remove PCA when using croco (may apply to all those ablation tests above)
-
-- [high priority] Try the debug stuff mentioned last meeting (see google docs)
-
-- [low priority] Formulate questions on remaining doubts
-
-- [high priority] Debug step by step infer.py the same way you did for gen_repre.py
-
-- [low priority] Rerun test image gahtering and results (bop1924 not all test images)
-
-
-> Insights from infer.py
-- Yes, KNN is using the "l2" metric and not the "cosine" one.
-- There are two KNNs performed:
-    -- One to match your query features to cluster centroids (i.e., visual words). This is part of the TF-IDF template matching process.
-       This step gives you which templates best match the query image based on word frequency and importance.
-
-    -- One to match individual query descriptors with specific features from each template. Each template has its own index of feature descriptors
-       So instead of finding which template matches, you're now figuring out where in each template the features align with the observed scene.
-
-       Note: both of them are unsing "l2" metric 
-- Is it okay to have:
-len(extractor_output["feature_maps"][0])
-768
-len(extractor_output["feature_maps"][0][0])
-26
-in infer.py line, 482
-
-- Riga 516:
-# Potentially project features to a PCA space.
-                if (
-                    query_features.shape[1] != repre.feat_vectors.shape[1]
-                    and len(repre.feat_raw_projectors) != 0
-                ):
-                    query_features_proj = projector_util.project_features(
-                        feat_vectors=query_features,
-                        projectors=repre.feat_raw_projectors,
-                    ).contiguous()
-Per il primo risultato:
-query_features.shape[1]
-768
-repre.feat_vectors.shape[1]
-256
-
+Removing [392, 280, 403, 402, 401]:
+Matched templates: [569, 457, 499, 570 (best), 400]
+MSSD error: 540.7127538731135, id: 271
+MSPD error : 225.31892996039323, id: 2269
