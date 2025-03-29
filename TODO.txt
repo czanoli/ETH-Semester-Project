@@ -19,33 +19,148 @@
 >> Results for debugging strategy 1 and 2:
 
 Query template: 392
-
+____________________________________________________
+-- cosine
 Removing []:
 Matched templates: [392 (best), 574, 462, 504, 280]
-MSSD error: 0.07512012856414313, id: 2772
-MSPD error : 0.006183439230107032, id: 5809
+MSSD error: 0.07512012856414313
+MSPD error : 0.006183439230107032
 
+-- RoPE100
+Removing []:
+Matched templates: [392 (best), 574, 462, 504, 280]
+MSSD error: 0.07512012856414313
+MSPD error : 0.006183439230107032
+____________________________________________________
+-- cosine
 Removing [392]:
 Matched templates: [573, 461, 503, 280 (best), 574]
-MSSD error: 69.92804745201619, id: 5607
-MSPD error : 12.334418661111533, id: 5725
+MSSD error: 69.92804745201619
+MSPD error : 12.334418661111533
 
+-- RoPE100
+Removing [392]:
+Matched templates: [573, 461, 503, 280 (best), 574]
+MSSD error:  69.92804745201619
+MSPD error : 12.334418661111533
+____________________________________________________
+-- cosine
 Removing [392, 280]:
 Matched templates: [572, 460, 502, 573, 403 (best)]
-MSSD error: 295.26353268318144, id: 3249
-MSPD error : 133.11173987033666, id: 118
+MSSD error: 295.26353268318144
+MSPD error : 133.11173987033666
 
+-- RoPE100
+Removing [392, 280]:
+Matched templates: [572, 460, 502, 573, 403 (best)]
+MSSD error: 295.26353268318144
+MSPD error : 133.11173987033666
+____________________________________________________
+-- cosine
 Removing [392, 280, 403]:
 Matched templates: [571, 459, 501, 572, 402 (best)]
-MSSD error: 401.53918524443833, id: 3248
-MSPD error : 181.12709440539618, id: 268
+MSSD error: 401.53918524443833
+MSPD error : 181.12709440539618
 
+-- RoPE100
+Removing [392, 280, 403]:
+Matched templates: [571, 459, 501, 572, 402 (best)]
+MSSD error: 401.53918524443833
+MSPD error : 181.12709440539618
+____________________________________________________
+-- cosine
 Removing [392, 280, 403, 402]:
 Matched templates: [570, 458, 500, 571, 401 (best)]
-MSSD error: 439.6859977520146, id: 2767
-MSPD error : 195.7457669219908, id: 143
+MSSD error: 439.6859977520146
+MSPD error : 195.7457669219908
 
+-- RoPE100
+Removing [392, 280, 403, 402]:
+Matched templates: [570, 458, 500, 571, 401 (best)]
+MSSD error: 439.6859977520146
+MSPD error : 195.7457669219908
+____________________________________________________
+-- cosine
 Removing [392, 280, 403, 402, 401]:
 Matched templates: [569, 457, 499, 570 (best), 400]
-MSSD error: 540.7127538731135, id: 271
-MSPD error : 225.31892996039323, id: 2269
+MSSD error: 540.7127538731135
+MSPD error : 225.31892996039323
+
+-- RoPE100
+Removing [392, 280, 403, 402, 401]:
+Matched templates: [569, 457, 499, 570 (best), 400]
+MSSD error: 540.7127538731135
+MSPD error : 225.31892996039323
+____________________________________________________
+
+
+
+###########  debug with background  #############
+
+Query template: 392
+Note: at every run the random noise is different
+Note: in realimage mode, the background is a constant real image that doesn't change between runs
+____________________________________________________
+-- random noise
+Removing []:
+Matched templates: [789, 715 (best), 144, 323, 222]
+MSSD error: 136.28845242053845, id: 1217
+MSPD error : 97.32239288190269, id: 2690
+Is template proposal stable: no
+Are MSSD & MSPD stable: no
+
+-- realimage
+Removing []:
+Matched templates: [392 (best), 644, 574, 575, 687]
+MSSD error: 0.07512220959434886, id: 2772
+MSPD error : 0.006183717834137225, id: 5809
+Is template proposal stable: yes
+Are MSSD & MSPD stable: yes
+____________________________________________________
+-- random noise
+Removing [715]:
+Matched templates: [61, 323, 788, 721, 144 (best)]
+MSSD error: 384.9988639511348, id: 272
+MSPD error : 141.21509558154526, id: 5765
+Is template proposal stable: no
+Are MSSD & MSPD stable: no
+
+-- realimage
+Removing [392]:
+Matched templates: [643, 573, 574 (best), 686, 694]
+MSSD error: 283.1255727767937, id: 135
+MSPD error : 137.41929509170055, id: 1478
+Is template proposal stable: yes
+Are MSSD & MSPD stable: yes
+____________________________________________________
+-- noise
+Removing [715, 144]:
+Matched templates: [787, 322, 391, 220, 504 (best)]
+MSSD error: 110.62091871498914, id: 4284
+MSPD error : 90.43863897664802, id: 2046
+Is template proposal stable: no
+Are MSSD & MSPD stable: no
+
+-- realimage
+Removing [392, 574]:
+Matched templates: [642 (best), 573, 685, 693, 580]
+MSSD error: 460.6728232895545, id: 5056
+MSPD error : 168.73063720140752, id: 784
+Is template proposal stable: yes
+Are MSSD & MSPD stable: yes
+____________________________________________________
+-- noise
+Removing [715, 144, 504]:
+Matched templates: [786, 322, 292, 757, 715]
+No associated feature vectors
+Is template proposal stable: no
+Are MSSD & MSPD stable: no
+
+-- realimage
+Removing [392, 574, 642]:
+Matched templates: [641 (best), 573, 684, 692, 580]
+MSSD error: 198.58347069294976, id: 5084
+MSPD error : 117.92533752679114, id: 3854
+Is template proposal stable: yes
+Are MSSD & MSPD stable: yes
+____________________________________________________

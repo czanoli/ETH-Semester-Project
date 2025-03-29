@@ -474,9 +474,9 @@ def infer(opts: InferOpts) -> None:
                 timer.start()
 
                 # debug
-                #from PIL import Image
-                #image_uint8 = (image_np_hwc * 255).astype(np.uint8)
-                #Image.fromarray(image_uint8).save("infer_image_np_hwc.png")
+                from PIL import Image
+                image_uint8 = (image_np_hwc * 255).astype(np.uint8)
+                Image.fromarray(image_uint8).save("infer_image_np_hwc.png")
 
                 # Extract feature map from the crop.
                 image_tensor_chw = array_to_tensor(image_np_hwc).to(torch.float32).permute(2,0,1).to(device)

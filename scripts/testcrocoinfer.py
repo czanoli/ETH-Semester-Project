@@ -139,16 +139,20 @@ def infer(opts: InferOpts) -> None:
     # ----- image and vis settings ----- #
     # ---------------------------------- #
     # 0392, 0434
-    debug_strategy2 = False
+    debug_strategy2 = True
     query_template_id = 392
     object_id = 1
     dataset_type = "lmo"
-    vis_for_paper = False      # False for detailed debug images, True for having the tiled images with feature maps
+    vis_for_paper = [False, True]      # False for detailed debug images, True for having the tiled images with feature maps
+    bg_noise = False
+    bg_realimage = True
+    saveplots = False
     #resize_value = 224
 
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     savefldr = os.path.join("debug", f"run_{timestamp}")
-    os.makedirs(savefldr, exist_ok=True)
+    if saveplots:
+        os.makedirs(savefldr, exist_ok=True)
     # ---------------------------------- #
     # ----- image and vis settings ----- #
     # ---------------------------------- #
@@ -157,6 +161,31 @@ def infer(opts: InferOpts) -> None:
     query_image = np.array(Image.open(f"bop_datasets/templates/v1/{dataset_type}/{object_id}/rgb/template_0{query_template_id}.png"))
     original_height, original_width = query_image.shape[:2]  # shape = (H, W, C)
     print(original_height, original_width)
+
+    if bg_noise:
+        # Create random noise background
+        random_background = np.random.randint(0, 256, size=query_image.shape, dtype=np.uint8)
+
+        # Mask out the black parts
+        mask = np.all(query_image == [0, 0, 0], axis=-1)
+
+        # Replace black pixels with the random background
+        query_image_with_bg = query_image.copy()
+        query_image_with_bg[mask] = random_background[mask]
+        query_image = query_image_with_bg
+
+    elif bg_realimage:
+        # Load a background image and resize to match your query image
+        bg_img = np.array(Image.open("debug/bg.png").resize((original_width, original_height)))
+
+        # Mask for black background in query image
+        mask = np.all(query_image == [0, 0, 0], axis=-1)
+
+        # Replace black background with pixels from background image
+        query_image_with_bg = query_image.copy()
+        query_image_with_bg[mask] = bg_img[mask]
+        query_image = query_image_with_bg
+
 
     # Resize image because we want it to be 224x224
     #query_image = cv2.resize(query_image, (resize_value, resize_value), interpolation=cv2.INTER_LINEAR)
@@ -182,7 +211,17 @@ def infer(opts: InferOpts) -> None:
         # store camera before filtering (used later)
         query_template_camera_c2w = repre.template_cameras_cam_from_model[query_template_id]
         # remove features belonging to the query template
-        excluded_template_ids = [query_template_id, 280, 403, 402, 401]
+        
+        if bg_noise:
+            excluded_template_ids = [715, 144, 504]
+            logger.info(f"Debug method: Strategy 2 + Noise Background. Removing: {excluded_template_ids}")
+        elif bg_realimage:
+            excluded_template_ids = [query_template_id, 574, 642]
+            logger.info(f"Debug method: Strategy 2 + RealImage Background. Removing: {excluded_template_ids}")
+        else:
+            excluded_template_ids = [query_template_id, 280, 403, 402, 401]  # query_template_id, 280, 403, 402, 401
+            logger.info(f"Debug method: Strategy 2. Removing: {excluded_template_ids}")
+        
         excluded_template_ids_tensor = torch.tensor(excluded_template_ids, device=repre.feat_to_template_ids.device)
         valid_feat_mask = ~torch.isin(repre.feat_to_template_ids, excluded_template_ids_tensor)
         valid_feat_mask = valid_feat_mask.to(repre.feat_to_vertex_ids.device)
@@ -289,6 +328,11 @@ def infer(opts: InferOpts) -> None:
                 visual_words_knn_index=visual_words_knn_index,
                 debug=opts.debug,
             )
+
+            best_template = max(corresp, key=lambda x: x["template_score"])
+            best_template_id = best_template["template_id"]
+            best_template_score = best_template["template_score"]
+            logger.info(f"Best template: {best_template_id}, with score: {best_template_score}")
 
             # Estimate coarse poses from corespondences.
             coarse_poses = []
@@ -574,45 +618,50 @@ def infer(opts: InferOpts) -> None:
                     matched_template_ids = [c["template_id"] for c in corresp]
                     matched_template_scores = [c["template_score"] for c in corresp]
 
-                    vis_tiles += vis_util.vis_inference_results(
-                        base_image=vis_base_image,
-                        object_repre=repre_np,
-                        object_lid=object_lid,
-                        object_pose_m2w=pose_m2w, # pose_m2w,
-                        object_pose_m2w_gt=object_pose_m2w_gt,
-                        feature_map_chw=feature_map_chw,
-                        feature_map_chw_proj=feature_map_chw_proj,
-                        vis_feat_map=opts.vis_feat_map,
-                        object_box=box_amodal.array_ltrb(),
-                        object_mask=mask_modal,
-                        camera_c2w=camera_c2w,
-                        corresp=best_corresp_np,
-                        matched_template_ids=matched_template_ids,
-                        matched_template_scores=matched_template_scores,
-                        best_template_ind=final_pose["corresp_id"],
-                        renderer=renderer,
-                        pose_eval_dict=pose_eval_dict,
-                        corresp_top_n=opts.vis_corresp_top_n,
-                        inlier_thresh=(opts.pnp_inlier_thresh),
-                        object_pose_m2w_coarse=pose_m2w_coarse,
-                        pose_eval_dict_coarse=pose_eval_dict_coarse,
-                        # For paper visualizations:
-                        vis_for_paper=vis_for_paper,
-                        extractor=extractor,
-                        debug_croco=True
-                    )
+                    if saveplots:
+                        for i in range(2):
+                            vis_tiles += vis_util.vis_inference_results(
+                                base_image=vis_base_image,
+                                object_repre=repre_np,
+                                object_lid=object_lid,
+                                object_pose_m2w=pose_m2w, # pose_m2w,
+                                object_pose_m2w_gt=object_pose_m2w_gt,
+                                feature_map_chw=feature_map_chw,
+                                feature_map_chw_proj=feature_map_chw_proj,
+                                vis_feat_map=opts.vis_feat_map,
+                                object_box=box_amodal.array_ltrb(),
+                                object_mask=mask_modal,
+                                camera_c2w=camera_c2w,
+                                corresp=best_corresp_np,
+                                matched_template_ids=matched_template_ids,
+                                matched_template_scores=matched_template_scores,
+                                best_template_ind=final_pose["corresp_id"],
+                                renderer=renderer,
+                                pose_eval_dict=pose_eval_dict,
+                                corresp_top_n=opts.vis_corresp_top_n,
+                                inlier_thresh=(opts.pnp_inlier_thresh),
+                                object_pose_m2w_coarse=pose_m2w_coarse,
+                                pose_eval_dict_coarse=pose_eval_dict_coarse,
+                                # For paper visualizations:
+                                vis_for_paper=vis_for_paper[i],
+                                extractor=extractor,
+                                debug_croco=True
+                            )
 
-                # Assemble visualization tiles to a grid and save it.
-                if len(vis_tiles):
-                    if repre.feat_vis_projectors[0].pca.n_components == 12:
-                        pca_tiles = np.vstack(vis_tiles[1:5])
-                        vis_tiles = np.vstack([vis_tiles[0]] + vis_tiles[5:])
-                        vis_grid = np.hstack([vis_tiles, pca_tiles])
-                    else:
-                        vis_grid = np.vstack(vis_tiles)
-                    vis_path = os.path.join(savefldr, "result_vis.png")
-                    inout.save_im(vis_path, vis_grid)
-                    logger.info(f"Visualization saved to {vis_path}")
+                            # Assemble visualization tiles to a grid and save it.
+                            if len(vis_tiles):
+                                if repre.feat_vis_projectors[0].pca.n_components == 12:
+                                    pca_tiles = np.vstack(vis_tiles[1:5])
+                                    vis_tiles = np.vstack([vis_tiles[0]] + vis_tiles[5:])
+                                    vis_grid = np.hstack([vis_tiles, pca_tiles])
+                                else:
+                                    vis_grid = np.vstack(vis_tiles)
+                                text = {0: "_detailed", 1: ""}
+                                vis_path = os.path.join(savefldr, f"result_vis{text[i]}.png")
+                                inout.save_im(vis_path, vis_grid)
+                                logger.info(f"Visualization saved to {vis_path}")
+
+                                vis_tiles = []
 
     # Empty unused GPU cache variables.
     if device == "cuda":
