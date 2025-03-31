@@ -136,7 +136,7 @@ class InferOpts(NamedTuple):
 def infer(opts: InferOpts) -> None:
 
     datasets_path = bop_config.datasets_path
-    saveplots = True
+    saveplots = False
     vis_for_paper = [False, True]
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     savefldr = os.path.join("debug", f"run_{timestamp}")
@@ -312,8 +312,8 @@ def infer(opts: InferOpts) -> None:
             bop_im_id = item_info["im_id"]
             bop_chunk_id = item_info["scene_id"]
 
-            if bop_chunk_id != 2 or bop_im_id != 322:
-                continue
+            #if bop_chunk_id != 2 or bop_im_id != 322:
+                #continue
 
             # Get instance identifier if specified.
             inst_id = None
@@ -510,8 +510,6 @@ def infer(opts: InferOpts) -> None:
                     from PIL import Image
                     image_uint8 = (masked_image * 255).astype(np.uint8)
                     Image.fromarray(image_uint8).save("debug/infer_masked_image.png")
-
-                    #image_np_hwc = masked_image.astype(np.float32)/255.0
 
                     # debug
                     from PIL import Image
@@ -888,7 +886,7 @@ def infer(opts: InferOpts) -> None:
 
                                     vis_tiles = []
 
-                        if False:   # if opts.debug
+                        if opts.debug:   # if opts.debug
                             pts_path = os.path.join(
                                 output_dir,
                                 f"{bop_chunk_id}_{bop_im_id}_{object_lid}_{inst_j}_{hypothesis_id}_vertice_error.ply",
@@ -915,8 +913,6 @@ def infer(opts: InferOpts) -> None:
             results_path = os.path.join(output_dir, "estimated-poses.json")
             logger.info("Saving estimated poses to: {}".format(results_path))
             pose_evaluator.save_results_json(results_path)
-        
-        print("ciao")
 
 
 def main() -> None:

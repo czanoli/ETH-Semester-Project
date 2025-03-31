@@ -166,3 +166,16 @@ Are MSSD & MSPD stable: yes
 ____________________________________________________
 
 
+
+
+------ next steps:
+1) run gen_repre.py to create nwe representations (with both the current version of croco but also the ViT Large, which is crocov2), 
+the config is already fine
+2) make sure infer is fine, for example the folder tun_xx created, the 2 visualization saved,
+etc.. you need to change it back so that if get the vis results in the default folder
+3) run infer (both croco v1 ViTase and crocov2 ViT Large)
+4) run evaluate
+
+
+
+
