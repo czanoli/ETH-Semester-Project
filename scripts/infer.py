@@ -51,6 +51,40 @@ from utils.misc import warp_depth_image, warp_image
 logger: logging.Logger = logging.get_logger()
 
 
+import numpy as np
+from PIL import Image, ImageDraw
+
+def save_feature_map_with_points(
+    feature_map_chw: torch.Tensor,
+    points: torch.Tensor,
+    image_np_hwc: np.ndarray,
+    image_size: Tuple[int, int],
+    pca_projector,
+    save_path: str = "debug/infer_featuremap_with_points.png"
+):
+    # Visualize the feature map using PCA
+    from utils import vis_util
+    feature_map = vis_util.vis_pca_feature_map(
+        feature_map_chw=feature_map_chw,
+        image_height=image_np_hwc.shape[0],
+        image_width=image_np_hwc.shape[1],
+        pca_projector=pca_projector,
+    )  # Output is HWC uint8 NumPy array
+
+    # Convert to a PIL image
+    img = Image.fromarray(feature_map)
+
+    # Draw red dots
+    draw = ImageDraw.Draw(img)
+    for pt in points:
+        x, y = pt.tolist()
+        r = 3  # dot radius
+        draw.ellipse([(x - r, y - r), (x + r, y + r)], fill=(255, 0, 0))  # red
+
+    # Save the image
+    img.save(save_path)
+
+
 class InferOpts(NamedTuple):
     """Options that can be specified via the command line."""
 
@@ -102,6 +136,12 @@ class InferOpts(NamedTuple):
 def infer(opts: InferOpts) -> None:
 
     datasets_path = bop_config.datasets_path
+    saveplots = False
+    vis_for_paper = [False, True]
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    savefldr = os.path.join("debug", f"run_{timestamp}")
+    if saveplots:
+        os.makedirs(savefldr, exist_ok=True)
 
     # Prepare a logger and a timer.
     logger = logging.get_logger(level=logging.INFO if opts.debug else logging.WARNING)
@@ -272,8 +312,8 @@ def infer(opts: InferOpts) -> None:
             bop_im_id = item_info["im_id"]
             bop_chunk_id = item_info["scene_id"]
 
-            # if bop_chunk_id != 2 or bop_im_id != 322:
-            #     continue
+            if bop_chunk_id != 2 or bop_im_id != 571:
+                continue
 
             # Get instance identifier if specified.
             inst_id = None
@@ -450,12 +490,36 @@ def infer(opts: InferOpts) -> None:
                         src_image=orig_image_np_hwc,
                         interpolation=interpolation,
                     )
+
+                    # --- start extractor with only masked object
                     mask_modal = warp_image(
                         src_camera=orig_camera_c2w,
                         dst_camera=crop_camera_model_c2w,
                         src_image=orig_mask_modal,
                         interpolation=cv2.INTER_NEAREST,
                     )
+
+                    assert mask_modal.ndim == 2, "Mask must be single-channel"
+                    assert set(np.unique(mask_modal)).issubset({0, 1}), "Mask must contain only 0 and 1"
+
+                    masked_image = np.zeros_like(image_np_hwc)
+                    masked_image[mask_modal == 1] = image_np_hwc[mask_modal == 1]
+                    
+                    # Save the result
+                    from PIL import Image
+                    image_uint8 = (masked_image * 255).astype(np.uint8)
+                    Image.fromarray(image_uint8).save("debug/infer_masked_image.png")
+
+                    image_np_hwc = masked_image.astype(np.float32)/255.0
+
+                    # debug
+                    '''
+                    from PIL import Image
+                    image_nphwc_uint8 = (image_np_hwc * 255).astype(np.uint8)
+                    image_modal_uint8 = (mask_modal * 255).astype(np.uint8)
+                    Image.fromarray(image_nphwc_uint8).save("image_np_hwc.png")
+                    Image.fromarray(image_modal_uint8).save("mask_model.png")
+                    '''
 
                     # Recalculate the object bounding box (it changed if we constructed the virtual camera).
                     ys, xs = mask_modal.nonzero()
@@ -474,9 +538,9 @@ def infer(opts: InferOpts) -> None:
                 timer.start()
 
                 # debug
-                from PIL import Image
-                image_uint8 = (image_np_hwc * 255).astype(np.uint8)
-                Image.fromarray(image_uint8).save("infer_image_np_hwc.png")
+                #from PIL import Image
+                #image_uint8 = (image_np_hwc * 255).astype(np.uint8)
+                #Image.fromarray(image_uint8).save("infer_image_np_hwc.png")
 
                 # Extract feature map from the crop.
                 image_tensor_chw = array_to_tensor(image_np_hwc).to(torch.float32).permute(2,0,1).to(device)
@@ -486,6 +550,15 @@ def infer(opts: InferOpts) -> None:
                 extractor_output = extractor(image_tensor_bchw)
                 feature_map_chw = extractor_output["feature_maps"][0]
 
+                from utils import vis_util
+                feature_map = vis_util.vis_pca_feature_map(
+                    feature_map_chw=feature_map_chw,
+                    image_height=image_np_hwc.shape[0],
+                    image_width=image_np_hwc.shape[1],
+                    pca_projector=repre.feat_vis_projectors[0],
+                )
+                Image.fromarray(feature_map).save("debug/infer_featuremap.png")
+
                 times["feat_extract"] = timer.elapsed("Time for feature extraction")
                 timer.start()
 
@@ -493,6 +566,15 @@ def infer(opts: InferOpts) -> None:
                 mask_modal_tensor = array_to_tensor(mask_modal).to(device)
                 query_points = feature_util.filter_points_by_mask(
                     grid_points, mask_modal_tensor
+                )
+
+                # plot feature map with query points
+                save_feature_map_with_points(
+                    feature_map_chw=feature_map_chw,
+                    points=query_points,
+                    image_np_hwc=image_np_hwc,
+                    image_size=(image_np_hwc.shape[1], image_np_hwc.shape[0]),
+                    pca_projector=repre.feat_vis_projectors[0],
                 )
 
                 # Subsample query points if we have too many.
@@ -515,6 +597,7 @@ def infer(opts: InferOpts) -> None:
 
                 times["grid_sample"] = timer.elapsed("Time for grid sample")
                 timer.start()
+
                 # Potentially project features to a PCA space.
                 if (
                     query_features.shape[1] != repre.feat_vectors.shape[1]
@@ -537,18 +620,6 @@ def infer(opts: InferOpts) -> None:
                 else:
                     query_features_proj = query_features
                     feature_map_chw_proj = feature_map_chw
-
-                # debug
-                '''
-                from PIL import Image
-                t = vis_util.vis_pca_feature_map(
-                feature_map_chw=feature_map_chw_proj,
-                image_height=420,
-                image_width=420,
-                pca_projector=repre.feat_vis_projectors[0],
-                )
-                Image.fromarray(t).save("infer_feature_map_chw_proj.png")
-                '''
 
                 times["proj"] = timer.elapsed("Time for projection")
                 timer.start()
@@ -642,6 +713,7 @@ def infer(opts: InferOpts) -> None:
 
                     # If no successful coarse pose, continue.
                     if len(coarse_poses) == 0:
+                        print("!!!! PORCODIO NO SUCESSFUL COARSE POSES !!!!")
                         continue
 
                     # Select the refined pose corresponding to the best coarse pose as the final pose.
@@ -771,51 +843,55 @@ def infer(opts: InferOpts) -> None:
                         matched_template_scores = [c["template_score"] for c in corresp]
     
                         timer.start()
-                        vis_tiles += vis_util.vis_inference_results(
-                            base_image=vis_base_image,
-                            object_repre=repre_np,
-                            object_lid=object_lid,
-                            object_pose_m2w=pose_m2w, # pose_m2w,
-                            object_pose_m2w_gt=object_pose_m2w_gt,
-                            feature_map_chw=feature_map_chw,
-                            feature_map_chw_proj=feature_map_chw_proj,
-                            vis_feat_map=opts.vis_feat_map,
-                            object_box=box_amodal.array_ltrb(),
-                            object_mask=mask_modal,
-                            camera_c2w=camera_c2w,
-                            corresp=best_corresp_np,
-                            matched_template_ids=matched_template_ids,
-                            matched_template_scores=matched_template_scores,
-                            best_template_ind=final_pose["corresp_id"],
-                            renderer=renderer,
-                            pose_eval_dict=pose_eval_dict,
-                            corresp_top_n=opts.vis_corresp_top_n,
-                            inlier_thresh=(opts.pnp_inlier_thresh),
-                            object_pose_m2w_coarse=pose_m2w_coarse,
-                            pose_eval_dict_coarse=pose_eval_dict_coarse,
-                            # For paper visualizations:
-                            vis_for_paper=opts.vis_for_paper,
-                            extractor=extractor,
-                        )
-                        timer.elapsed("Time for visualization")
+                        if saveplots:
+                            for i in range(2):
+                                vis_tiles += vis_util.vis_inference_results(
+                                    base_image=vis_base_image,
+                                    object_repre=repre_np,
+                                    object_lid=object_lid,
+                                    object_pose_m2w=pose_m2w, # pose_m2w,
+                                    object_pose_m2w_gt=object_pose_m2w_gt,
+                                    feature_map_chw=feature_map_chw,
+                                    feature_map_chw_proj=feature_map_chw_proj,
+                                    vis_feat_map=opts.vis_feat_map,
+                                    object_box=box_amodal.array_ltrb(),
+                                    object_mask=mask_modal,
+                                    camera_c2w=camera_c2w,
+                                    corresp=best_corresp_np,
+                                    matched_template_ids=matched_template_ids,
+                                    matched_template_scores=matched_template_scores,
+                                    best_template_ind=final_pose["corresp_id"],
+                                    renderer=renderer,
+                                    pose_eval_dict=pose_eval_dict,
+                                    corresp_top_n=opts.vis_corresp_top_n,
+                                    inlier_thresh=(opts.pnp_inlier_thresh),
+                                    object_pose_m2w_coarse=pose_m2w_coarse,
+                                    pose_eval_dict_coarse=pose_eval_dict_coarse,
+                                    # For paper visualizations:
+                                    vis_for_paper=opts.vis_for_paper,
+                                    extractor=extractor,
+                                )
+                        
 
-                    # Assemble visualization tiles to a grid and save it.
-                    if len(vis_tiles):
-                        if repre.feat_vis_projectors[0].pca.n_components == 12:
-                            pca_tiles = np.vstack(vis_tiles[1:5])
-                            vis_tiles = np.vstack([vis_tiles[0]] + vis_tiles[5:])
-                            vis_grid = np.hstack([vis_tiles, pca_tiles])
-                        else:
-                            vis_grid = np.vstack(vis_tiles)
-                        ext = ".png" if opts.vis_for_paper else ".jpg"
-                        vis_path = os.path.join(
-                            output_dir,
-                            f"{bop_chunk_id}_{bop_im_id}_{object_lid}_{inst_j}_{hypothesis_id}{ext}",
-                        )
-                        inout.save_im(vis_path, vis_grid)
-                        logger.info(f"Visualization saved to {vis_path}")
+                                # Assemble visualization tiles to a grid and save it.
+                                if len(vis_tiles):
+                                    if repre.feat_vis_projectors[0].pca.n_components == 12:
+                                        pca_tiles = np.vstack(vis_tiles[1:5])
+                                        vis_tiles = np.vstack([vis_tiles[0]] + vis_tiles[5:])
+                                        vis_grid = np.hstack([vis_tiles, pca_tiles])
+                                    else:
+                                        vis_grid = np.vstack(vis_tiles)
+                                    ext = ".png" if opts.vis_for_paper else ".jpg"
+                                    vis_path = os.path.join(
+                                        output_dir,
+                                        f"{bop_chunk_id}_{bop_im_id}_{object_lid}_{inst_j}_{hypothesis_id}{ext}",
+                                    )
+                                    inout.save_im(vis_path, vis_grid)
+                                    logger.info(f"Visualization saved to {vis_path}")
 
-                        if opts.debug:
+                                    vis_tiles = []
+
+                        if False:   # if opts.debug
                             pts_path = os.path.join(
                                 output_dir,
                                 f"{bop_chunk_id}_{bop_im_id}_{object_lid}_{inst_j}_{hypothesis_id}_vertice_error.ply",

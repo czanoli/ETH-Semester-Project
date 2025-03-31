@@ -63,6 +63,9 @@ from utils.misc import warp_depth_image, warp_image
 import torch.nn.functional as F
 from sklearn.decomposition import PCA
 
+import matplotlib.pyplot as plt
+
+
 
 logger: logging.Logger = logging.get_logger()
 
@@ -139,13 +142,15 @@ def infer(opts: InferOpts) -> None:
     # ----- image and vis settings ----- #
     # ---------------------------------- #
     # 0392, 0434
-    debug_strategy2 = True
+    debug_strategy2 = False
     query_template_id = 392
+    query_image_id = 571
+    is_real_query = True
     object_id = 1
     dataset_type = "lmo"
     vis_for_paper = [False, True]      # False for detailed debug images, True for having the tiled images with feature maps
     bg_noise = False
-    bg_realimage = True
+    bg_realimage = False
     saveplots = False
     #resize_value = 224
 
@@ -157,10 +162,14 @@ def infer(opts: InferOpts) -> None:
     # ----- image and vis settings ----- #
     # ---------------------------------- #
 
-
-    query_image = np.array(Image.open(f"bop_datasets/templates/v1/{dataset_type}/{object_id}/rgb/template_0{query_template_id}.png"))
-    original_height, original_width = query_image.shape[:2]  # shape = (H, W, C)
-    print(original_height, original_width)
+    if is_real_query:
+        query_image = np.array(Image.open(f"bop_datasets/lmo/test/000002/rgb/000{query_image_id}.png"))
+        original_height, original_width = query_image.shape[:2]  # shape = (H, W, C)
+        print(original_height, original_width)
+    else:
+        query_image = np.array(Image.open(f"bop_datasets/templates/v1/{dataset_type}/{object_id}/rgb/template_0{query_template_id}.png"))
+        original_height, original_width = query_image.shape[:2]  # shape = (H, W, C)
+        print(original_height, original_width)
 
     if bg_noise:
         # Create random noise background
@@ -186,17 +195,87 @@ def infer(opts: InferOpts) -> None:
         query_image_with_bg[mask] = bg_img[mask]
         query_image = query_image_with_bg
 
-
     # Resize image because we want it to be 224x224
     #query_image = cv2.resize(query_image, (resize_value, resize_value), interpolation=cv2.INTER_LINEAR)
     #resize_scale_x = resize_value / original_width   # for later focal length adjustment
     #resize_scale_y = resize_value / original_height  # for later focal length adjustment
 
-    image_np_hwc = query_image.astype(np.float32)/255.0
+    # -------- start extract only mask
+    import kornia
+
+    if is_real_query:
+        # Load binary segmentation mask (H, W), values should be 0 (background) or 255 (object)
+        mask_image = np.array(Image.open(
+            f"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/lmo/test/000002/mask_visib/000{query_image_id}_000001.png"
+        ))
+        assert mask_image.ndim == 2, "Mask must be single-channel"
+        assert set(np.unique(mask_image)).issubset({0, 255}), "Mask must contain only 0 and 1"
+        
+
+
+    else:
+        # Load binary segmentation mask (H, W), values should be 0 (background) or 255 (object)
+        mask_image = np.array(Image.open(
+            f"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/templates/v1/{dataset_type}/{object_id}/mask/template_0{query_template_id}.png"
+        ))
+        assert mask_image.ndim == 2, "Mask must be single-channel"
+        assert set(np.unique(mask_image)).issubset({0, 255}), "Mask must contain only 0 and 255"
+
+    # Convert mask to torch tensor
+    object_mask = torch.tensor(mask_image, dtype=torch.uint8, device=device)
+    mask_np = object_mask.cpu().numpy()
+
+    # Erode the mask (old trial for debugging)
+    '''
+    kernel = torch.ones(5, 5).to(device)
+    object_mask_eroded = kornia.morphology.erosion(
+        object_mask.reshape(1, 1, *object_mask.shape).float(), kernel
+    ).squeeze([0, 1])
+
+    object_mask_eroded = object_mask_eroded.to(dtype=torch.uint8)
+    mask_eroded_np = object_mask_eroded.cpu().numpy()
+
+    # Create a figure
+    plt.figure(figsize=(10, 5))  # Optional: set figure size
+
+    # Original mask
+    plt.subplot(1, 2, 1)
+    plt.title("Original Mask")
+    plt.imshow(mask_image, cmap='gray')
+    plt.axis('off')
+
+    # Eroded mask
+    plt.subplot(1, 2, 2)
+    plt.title("Eroded Mask")
+    plt.imshow(object_mask_eroded.cpu().numpy(), cmap='gray')
+    plt.axis('off')
+
+    # Save to file
+    plt.tight_layout()
+    plt.savefig("debug/mask_comparison.png")
+    plt.close()
+    '''
+
+    # Create a black image (same size as query_image)
+    masked_image = np.zeros_like(query_image)
+    if is_real_query:
+        # Copy pixels from the object area only
+        masked_image[mask_np == 1] = query_image[mask_np == 1]
+    
+    else:
+        # Copy pixels from the object area only
+        masked_image[mask_np == 255] = query_image[mask_np == 255]
+
+    # Save the result
+    #Image.fromarray(masked_image).save("debug/masked_input_eroded.png")
+    # -------- end extract only mask
+
+    image_np_hwc = masked_image.astype(np.float32)/255.0
 
     # Extract feature map.
     image_tensor_chw = array_to_tensor(image_np_hwc).to(torch.float32).permute(2,0,1).to(device)
     image_tensor_bchw = image_tensor_chw.unsqueeze(0)
+
     extractor_output = extractor(image_tensor_bchw)
     feature_map_chw = extractor_output["feature_maps"][0]
 
@@ -273,12 +352,17 @@ def infer(opts: InferOpts) -> None:
             grid_points, mask_modal_tensor
         )
 
+        
         # Extract features at the selected points, of shape (num_points, feat_dims).
         query_features = feature_util.sample_feature_map_at_points(
             feature_map_chw=feature_map_chw,
             points=query_points,
             image_size=(image_np_hwc.shape[1], image_np_hwc.shape[0]),
         ).contiguous()
+        
+        # -- part of giving only segemnted object as input to croco, reshape needed becase
+        # we want (num_points, feat_dims)
+        #query_features_new = feature_map_chw.permute(1, 2, 0).reshape(-1, feature_map_chw.shape[0]).contiguous()
 
         # Potentially project features to a PCA space.
         if (
