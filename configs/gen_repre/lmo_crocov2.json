@@ -4,7 +4,7 @@
         "templates_version": "v1",
         "object_dataset": "lmo",
         "object_lids": [1],
-        "extractor_name": "crocov2_CroCo_V2_ViTBase_BaseDecoder_layer=9",
+        "extractor_name": "crocov2_CroCo_V2_ViTBase_BaseDecoder_layer=12",
         "grid_cell_size": 14.0,
         "apply_pca": true,
         "pca_components": 256,

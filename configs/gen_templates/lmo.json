@@ -16,6 +16,6 @@
         "features_patch_size": 14,
         "crop": true,
         "crop_rel_pad": 0.2,
-        "crop_size": [224, 224]
+        "crop_size": [480, 480]
     }
 }

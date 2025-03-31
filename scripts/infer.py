@@ -136,7 +136,7 @@ class InferOpts(NamedTuple):
 def infer(opts: InferOpts) -> None:
 
     datasets_path = bop_config.datasets_path
-    saveplots = False
+    saveplots = True
     vis_for_paper = [False, True]
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     savefldr = os.path.join("debug", f"run_{timestamp}")
@@ -312,7 +312,7 @@ def infer(opts: InferOpts) -> None:
             bop_im_id = item_info["im_id"]
             bop_chunk_id = item_info["scene_id"]
 
-            if bop_chunk_id != 2 or bop_im_id != 571:
+            if bop_chunk_id != 2 or bop_im_id != 322:
                 continue
 
             # Get instance identifier if specified.
@@ -499,6 +499,7 @@ def infer(opts: InferOpts) -> None:
                         interpolation=cv2.INTER_NEAREST,
                     )
 
+                    
                     assert mask_modal.ndim == 2, "Mask must be single-channel"
                     assert set(np.unique(mask_modal)).issubset({0, 1}), "Mask must contain only 0 and 1"
 
@@ -510,16 +511,15 @@ def infer(opts: InferOpts) -> None:
                     image_uint8 = (masked_image * 255).astype(np.uint8)
                     Image.fromarray(image_uint8).save("debug/infer_masked_image.png")
 
-                    image_np_hwc = masked_image.astype(np.float32)/255.0
+                    #image_np_hwc = masked_image.astype(np.float32)/255.0
 
                     # debug
-                    '''
                     from PIL import Image
                     image_nphwc_uint8 = (image_np_hwc * 255).astype(np.uint8)
                     image_modal_uint8 = (mask_modal * 255).astype(np.uint8)
-                    Image.fromarray(image_nphwc_uint8).save("image_np_hwc.png")
-                    Image.fromarray(image_modal_uint8).save("mask_model.png")
-                    '''
+                    Image.fromarray(image_nphwc_uint8).save("debug/image_np_hwc.png")
+                    Image.fromarray(image_modal_uint8).save("debug/mask_model.png")
+                    
 
                     # Recalculate the object bounding box (it changed if we constructed the virtual camera).
                     ys, xs = mask_modal.nonzero()
@@ -543,7 +543,7 @@ def infer(opts: InferOpts) -> None:
                 #Image.fromarray(image_uint8).save("infer_image_np_hwc.png")
 
                 # Extract feature map from the crop.
-                image_tensor_chw = array_to_tensor(image_np_hwc).to(torch.float32).permute(2,0,1).to(device)
+                image_tensor_chw = array_to_tensor(masked_image).to(torch.float32).permute(2,0,1).to(device)
                 image_tensor_bchw = image_tensor_chw.unsqueeze(0)
                 
                 # Pass the image through the extractor
@@ -713,7 +713,7 @@ def infer(opts: InferOpts) -> None:
 
                     # If no successful coarse pose, continue.
                     if len(coarse_poses) == 0:
-                        print("!!!! PORCODIO NO SUCESSFUL COARSE POSES !!!!")
+                        print("!!!! NO SUCESSFUL COARSE POSES !!!!")
                         continue
 
                     # Select the refined pose corresponding to the best coarse pose as the final pose.
@@ -868,10 +868,10 @@ def infer(opts: InferOpts) -> None:
                                     object_pose_m2w_coarse=pose_m2w_coarse,
                                     pose_eval_dict_coarse=pose_eval_dict_coarse,
                                     # For paper visualizations:
-                                    vis_for_paper=opts.vis_for_paper,
+                                    vis_for_paper=vis_for_paper[i],
                                     extractor=extractor,
+                                    debug_croco=True
                                 )
-                        
 
                                 # Assemble visualization tiles to a grid and save it.
                                 if len(vis_tiles):
@@ -881,11 +881,8 @@ def infer(opts: InferOpts) -> None:
                                         vis_grid = np.hstack([vis_tiles, pca_tiles])
                                     else:
                                         vis_grid = np.vstack(vis_tiles)
-                                    ext = ".png" if opts.vis_for_paper else ".jpg"
-                                    vis_path = os.path.join(
-                                        output_dir,
-                                        f"{bop_chunk_id}_{bop_im_id}_{object_lid}_{inst_j}_{hypothesis_id}{ext}",
-                                    )
+                                    text = {0: "_detailed", 1: ""}
+                                    vis_path = os.path.join(savefldr, f"result_vis{text[i]}.png")
                                     inout.save_im(vis_path, vis_grid)
                                     logger.info(f"Visualization saved to {vis_path}")
 
@@ -918,6 +915,8 @@ def infer(opts: InferOpts) -> None:
             results_path = os.path.join(output_dir, "estimated-poses.json")
             logger.info("Saving estimated poses to: {}".format(results_path))
             pose_evaluator.save_results_json(results_path)
+        
+        print("ciao")
 
 
 def main() -> None:

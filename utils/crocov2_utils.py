@@ -71,6 +71,7 @@ class CrocoFeatureExtractor(nn.Module):
             # But if we want a different layer:
             # If self.layer_index is None or out of range, default to final layer
             if self.layer_index is None or self.layer_index >= len(out_list):
+                print(" !!!! Getting from CroCov2, output of last layer")
                 x = out_list[-1]  # final block, normalized by default by the previous self.model._encode_image(...)
             else:
                 print(f" !!!! Getting from CroCov2, output of intermediate layer #{self.layer_index}")
