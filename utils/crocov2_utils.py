@@ -59,14 +59,58 @@ class CrocoFeatureExtractor(nn.Module):
 
         # 2) Get patch embeddings
         with torch.no_grad():
-            # out_list is a list of length enc_depth (12)
-            # out_list[0] is the output after block 0
-            # out_list[11] might be the last block (for enc_depth=12)
-            out_list, pos, masks = self.model._encode_image(
-                images, 
-                do_mask=False, 
-                return_all_blocks=True
-            )
+            debug_shapes = True
+            if debug_shapes:
+                # 1) Encode the "first" image
+                enc_list_1, pos1, mask1 = self.model._encode_image(
+                    images, 
+                    do_mask=False, 
+                    return_all_blocks=True
+                )
+
+                # Print shapes for each encoder block
+                print("\n\n------------------------")
+                for i, x_block in enumerate(enc_list_1):
+                    B, N, C = x_block.shape
+                    h_p = w_p = int(N ** 0.5)
+                    print(f"Encoder block {i} output: (B={B}, N={N}, C={C}) => (B, C, {h_p}, {w_p})")
+                
+                # 2) Encode the "second" image (same image again), just to feed the decoder
+                enc_list_2, pos2, mask2 = self.model._encode_image(
+                    images, 
+                    do_mask=False, 
+                    return_all_blocks=True
+                )
+
+                # 3) Call the decoder on the final enc outputs (from block -1)
+                dec_out_list = self.model._decoder(
+                    feat1=enc_list_1[-1],  # final features from "image1"
+                    pos1=pos1,
+                    masks1=mask1,         
+                    feat2=enc_list_2[-1], # final features from "image2"
+                    pos2=pos2,
+                    return_all_blocks=True
+                )
+
+                # 4) Print decoder block shapes
+                print("------------------------")
+                for i, dec_block_out in enumerate(dec_out_list):
+                    B, N, C = dec_block_out.shape
+                    print(f"Decoder block {i} output: (B={B}, N={N}, C={C}) => (B, C, {h_p}, {w_p})")
+                print("------------------------\n\n")
+
+            else:
+                # out_list is a list of length enc_depth (12)
+                # out_list[0] is the output after block 0
+                # out_list[11] might be the last block (for enc_depth=12)
+                out_list, pos, masks = self.model._encode_image(
+                    images, 
+                    do_mask=False, 
+                    return_all_blocks=True
+                )
+
+            print("ciao")
+            
             # out_list[-1] has the final, normalized features from block 11
             # But if we want a different layer:
             # If self.layer_index is None or out of range, default to final layer

@@ -166,6 +166,15 @@ Are MSSD & MSPD stable: yes
 ____________________________________________________
 
 
+[760, 466, 473, 648, 586]
+ MSSD error: 87.59123324730587, id: 1234
+I0401 13:10:23.854 48351 eval_util.py:165] MSPD error : 185.04604873305126, id: 4663
+
+
+Matched templates: [574, 686, 769, 657, 760]
+Number of corresp: [204, 204, 204, 204, 204]
+I0401 13:32:01.418 50354 eval_util.py:157] MSSD error: 13.448917115282228, id: 780
+I0401 13:32:01.418 50354 eval_util.py:165] MSPD error : 23.587273191399174, id: 86
 
 
 ------ next steps:
@@ -176,6 +185,170 @@ etc.. you need to change it back so that if get the vis results in the default f
 3) run infer (both croco v1 ViTase and crocov2 ViT Large)
 4) run evaluate
 
+--> with ViT Large:
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.04872664359861591
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.0554325259515571
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.14380622837370244
+INFO:eval_bop19_pose:- bop19_average_recall: 0.08265513264129182
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 1.8464160132408143
+INFO:eval_bop19_pose:Evaluation took 21.566771984100342s.
+INFO:eval_bop19_pose:Done.
+
+
+---- 02.04.2025 TODO
+Fare summary delle dimensioni (H,W,C) di tutti i layer di: DINOv2, CroCov1, crocov2
+Notes: with DINOv2 use 420x420 image, with CroCo use 480x480
+
+
+--------------  CroCo_V2_ViTBase_SmallDecoder  --------------
+-------------------------------------------------------------
+Encoder block 0 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 1 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 2 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 3 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 4 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 5 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 6 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 7 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 8 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 9 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 10 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 11 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+-------------------------------------------------------------
+Decoder block 0 output: (B=1, N=900, C=512) => (B, C, 30, 30)
+Decoder block 1 output: (B=1, N=900, C=512) => (B, C, 30, 30)
+Decoder block 2 output: (B=1, N=900, C=512) => (B, C, 30, 30)
+Decoder block 3 output: (B=1, N=900, C=512) => (B, C, 30, 30)
+Decoder block 4 output: (B=1, N=900, C=512) => (B, C, 30, 30)
+Decoder block 5 output: (B=1, N=900, C=512) => (B, C, 30, 30)
+Decoder block 6 output: (B=1, N=900, C=512) => (B, C, 30, 30)
+Decoder block 7 output: (B=1, N=900, C=512) => (B, C, 30, 30)
+-------------------------------------------------------------
+
+
+--------------  CroCo_V2_ViTBase_BaseDecoder  ---------------
+-------------------------------------------------------------
+Encoder block 0 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 1 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 2 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 3 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 4 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 5 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 6 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 7 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 8 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 9 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 10 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Encoder block 11 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+-------------------------------------------------------------
+Decoder block 0 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 1 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 2 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 3 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 4 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 5 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 6 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 7 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 8 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 9 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 10 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 11 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+-------------------------------------------------------------
+
+
+--------------  CroCo_V2_ViTLarge_BaseDecoder  --------------
+-------------------------------------------------------------
+Encoder block 0 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 1 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 2 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 3 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 4 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 5 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 6 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 7 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 8 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 9 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 10 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 11 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 12 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 13 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 14 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 15 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 16 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 17 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 18 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 19 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 20 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 21 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 22 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 24 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+-------------------------------------------------------------
+Decoder block 0 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 1 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 2 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 3 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 4 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 5 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 6 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 7 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 8 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 9 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 10 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+Decoder block 11 output: (B=1, N=900, C=768) => (B, C, 30, 30)
+-------------------------------------------------------------
 
 
 
+-------- DINOv2: image size 420x420, patch_size = 14 --------
+
+---------------  DINOv2 (vits14, vits14-reg) ----------------
+-------------------------------------------------------------
+Layer [1]: Patch Resolution = (30, 30) (num_patches_h, num_patches_w)
+Layer [1]: Spatial Resolution = (420, 420, 384) (H, W, C)
+
+Layer [2]: Patch Resolution = (30, 30) (num_patches_h, num_patches_w)
+Layer [2]: Spatial Resolution = (420, 420, 384) (H, W, C)
+
+Layer [3]: Patch Resolution = (30, 30) (num_patches_h, num_patches_w)
+Layer [3]: Spatial Resolution = (420, 420, 384) (H, W, C)
+
+Layer [4]: Patch Resolution = (30, 30) (num_patches_h, num_patches_w)
+Layer [4]: Spatial Resolution = (420, 420, 384) (H, W, C)
+
+Layer [5]: Patch Resolution = (30, 30) (num_patches_h, num_patches_w)
+Layer [5]: Spatial Resolution = (420, 420, 384) (H, W, C)
+
+Layer [6]: Patch Resolution = (30, 30) (num_patches_h, num_patches_w)
+Layer [6]: Spatial Resolution = (420, 420, 384) (H, W, C)
+
+Layer [7]: Patch Resolution = (30, 30) (num_patches_h, num_patches_w)
+Layer [7]: Spatial Resolution = (420, 420, 384) (H, W, C)
+
+Layer [8]: Patch Resolution = (30, 30) (num_patches_h, num_patches_w)
+Layer [8]: Spatial Resolution = (420, 420, 384) (H, W, C)
+
+Layer [9]: Patch Resolution = (30, 30) (num_patches_h, num_patches_w)
+Layer [9]: Spatial Resolution = (420, 420, 384) (H, W, C)
+
+Layer [10]: Patch Resolution = (30, 30) (num_patches_h, num_patches_w)
+Layer [10]: Spatial Resolution = (420, 420, 384) (H, W, C)
+
+Layer [11]: Patch Resolution = (30, 30) (num_patches_h, num_patches_w)
+Layer [11]: Spatial Resolution = (420, 420, 384) (H, W, C)
+
+
+--------------  DINOv2 (vitb14, vitb14-reg) -----------------
+-------------------------------------------------------------
+Same as above, but feature depth is 768 instead of 384
+Blocks: [0, 1, ... 10, 11]
+
+--------------  DINOv2 (vitl14, vitl14-reg) -----------------
+-------------------------------------------------------------
+Same as above, but feature depth is 1024 instead of 768
+Blocks: [0, 1, ... 23, 24]
+
+--------------  DINOv2 (vitg14, vitg14-reg) -----------------
+-------------------------------------------------------------
+Same as above, but feature depth is 1536 instead of 1024
+Blocks: [0, 1, ... 38, 39]

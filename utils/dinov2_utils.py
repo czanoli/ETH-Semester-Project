@@ -130,10 +130,13 @@ class DinoFeatureExtractor(nn.Module):
         images = self.normalize(images)
 
         outputs = self.extract_descriptors(
-            batch=images,
-            layer=self.layer,
-            facet=self.facet,
-        )
+                batch=images,
+                layer=self.layer,
+                facet=self.facet,
+            )
+
+
+        print("!!!!!!!!!! test !!!!!!!!!!!!!")
 
         # CLS tokens of size Bx1xD.
         cls_tokens = outputs["cls_tokens"][:, 0, :, :]
@@ -211,6 +214,7 @@ class DinoFeatureExtractor(nn.Module):
                 {"key", "query", "value", "token", "attn"}
         """
         for block_idx, block in enumerate(self.model.blocks):
+            #print(block_idx)
             if block_idx in layers:
                 if facet == "token":
                     self.hook_handlers.append(
@@ -268,6 +272,17 @@ class DinoFeatureExtractor(nn.Module):
             1 + (H - self.patch_size) // self.stride,
             1 + (W - self.patch_size) // self.stride,
         )
+
+        # ---- start debuug shapes
+        # Compute spatial resolution in pixels
+        H_pixels = self.num_patches[0] * self.stride
+        W_pixels = self.num_patches[1] * self.stride
+        feature_depth = self._feats[0].shape[-1] if self._feats else "Unknown"
+        # Print both patch resolution and spatial resolution
+        print(f"Layer {layers}: Patch Resolution = {self.num_patches} (num_patches_h, num_patches_w)")
+        print(f"Layer {layers}: Spatial Resolution = ({H_pixels}, {W_pixels}, {feature_depth}) (H, W, C)")
+        # ---- end debug shapes
+
         return self._feats
 
     def extract_descriptors(
@@ -292,9 +307,9 @@ class DinoFeatureExtractor(nn.Module):
             "token",
         ], f"""{facet} is not a supported facet for descriptors."""
 
+
         self._extract_features(batch, [layer], facet)
         outputs = {}
-
         x = self._feats[0]
 
         if facet == "token":

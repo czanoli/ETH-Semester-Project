@@ -33,7 +33,7 @@ class CroCoNet(nn.Module):
                  mlp_ratio=4,
                  norm_layer=partial(nn.LayerNorm, eps=1e-6),
                  norm_im2_in_dec=True,   # whether to apply normalization of the 'memory' = (second image) in the decoder 
-                 pos_embed='RoPE100',     # positional embedding (either cosine or RoPE100)
+                 pos_embed='cosine',     # positional embedding (either cosine or RoPE100)
                 ):
                 
         super(CroCoNet, self).__init__()
