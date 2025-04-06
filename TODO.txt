@@ -282,7 +282,7 @@ Encoder block 19 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
 Encoder block 20 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
 Encoder block 21 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
 Encoder block 22 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
-Encoder block 24 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
+Encoder block 23 output: (B=1, N=900, C=1024) => (B, C, 30, 30)
 -------------------------------------------------------------
 Decoder block 0 output: (B=1, N=900, C=768) => (B, C, 30, 30)
 Decoder block 1 output: (B=1, N=900, C=768) => (B, C, 30, 30)
@@ -352,3 +352,6 @@ Blocks: [0, 1, ... 23, 24]
 -------------------------------------------------------------
 Same as above, but feature depth is 1536 instead of 1024
 Blocks: [0, 1, ... 38, 39]
+
+
+--------------- Results different enc/dec blocks [Model: ViTBase_SmallDecoder]

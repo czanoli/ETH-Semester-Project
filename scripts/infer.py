@@ -254,7 +254,7 @@ def infer(opts: InferOpts) -> None:
             tensor_device=device,
         )
 
-        logger.info("Object representation loaded.")
+        logger.info(f"Object representation loaded from {repre_dir}.")
         repre_np = repre_util.convert_object_repre_to_numpy(repre)
 
         # Build a kNN index from object feature vectors.
@@ -312,7 +312,7 @@ def infer(opts: InferOpts) -> None:
             bop_im_id = item_info["im_id"]
             bop_chunk_id = item_info["scene_id"]
 
-            if bop_chunk_id != 2 or bop_im_id != 322:
+            if opts.object_dataset != "lmo":
                 continue
 
             # Get instance identifier if specified.
@@ -886,7 +886,7 @@ def infer(opts: InferOpts) -> None:
                         inout.save_im(vis_path, vis_grid)
                         logger.info(f"Visualization saved to {vis_path}")
 
-                        if opts.debug:   # if opts.debug
+                        if False:   # if opts.debug
                             pts_path = os.path.join(
                                 output_dir,
                                 f"{bop_chunk_id}_{bop_im_id}_{object_lid}_{inst_j}_{hypothesis_id}_vertice_error.ply",

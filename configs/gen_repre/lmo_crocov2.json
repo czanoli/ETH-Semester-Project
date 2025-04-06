@@ -1,10 +1,10 @@
 {
     "gen_repre_opts": {
-        "version": "crocov2",
+        "version": "crocov2_ViTLargeBaseDecoderDecoder7",
         "templates_version": "v1",
         "object_dataset": "lmo",
-        "object_lids": [1,5,6,8,9,10,11,12],
-        "extractor_name": "crocov2_CroCo_V2_ViTBase_SmallDecoder_layer=12",
+        "object_lids": [1],
+        "extractor_name": "crocov2_CroCo_V2_ViTLarge_BaseDecoder_decoder=7",
         "grid_cell_size": 14.0,
         "apply_pca": true,
         "pca_components": 256,

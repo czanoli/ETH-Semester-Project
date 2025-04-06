@@ -23,6 +23,13 @@ class CrocoFeatureExtractor(nn.Module):
         key, val = name_items[-1].split("=")
         if key == "layer":
             self.layer_index = int(val)
+            self.decoder_layer_index = None
+        elif key == "decoder":
+            self.decoder_layer_index = int(val)
+            self.layer_index = None
+        else:
+            self.layer_index = None
+            self.decoder_layer_index = None
 
         # 1) normalization (as with DINOv2) 
         self.normalize = T.Normalize(
@@ -59,7 +66,50 @@ class CrocoFeatureExtractor(nn.Module):
 
         # 2) Get patch embeddings
         with torch.no_grad():
-            debug_shapes = True
+            # First encoding
+            enc_list_1, pos1, mask1 = self.model._encode_image(
+                images,
+                do_mask=False,
+                return_all_blocks=True
+            )
+            # Use encoder
+            if (self.decoder_layer_index is None) and (self.layer_index is not None):
+                if self.layer_index is None or self.layer_index >= len(enc_list_1):
+                    print(" !!!! Getting from CroCov2, output of last encoder layer")
+                    x = enc_list_1[-1]
+                else:
+                    print(f" !!!! Getting from CroCov2, output of encoder layer #{self.layer_index}")
+                    x = enc_list_1[self.layer_index - 1]
+                    x = self.model.enc_norm(x)
+            # Use decoder
+            elif (self.decoder_layer_index is not None) and (self.layer_index is None):
+                # Second encoding for decoder input (same image)
+                enc_list_2, pos2, mask2 = self.model._encode_image(
+                    images,
+                    do_mask=False,
+                    return_all_blocks=True
+                )
+
+                dec_out_list = self.model._decoder(
+                    feat1=enc_list_1[-1],  # image1 features
+                    pos1=pos1,
+                    masks1=mask1,
+                    feat2=enc_list_2[-1],  # image2 features
+                    pos2=pos2,
+                    return_all_blocks=True
+                )
+
+                if self.decoder_layer_index >= len(dec_out_list):
+                    print(" !!!! Getting from CroCov2, output of last decoder layer")
+                    x = dec_out_list[-1]
+                else:
+                    print(f" !!!! Getting from CroCov2, output of decoder layer #{self.decoder_layer_index}")
+                    x = dec_out_list[self.decoder_layer_index]
+            else:
+                print(f" !!!! Everything is None !!!! ")
+
+            '''
+            #debug_shapes = False
             if debug_shapes:
                 # 1) Encode the "first" image
                 enc_list_1, pos1, mask1 = self.model._encode_image(
@@ -108,22 +158,21 @@ class CrocoFeatureExtractor(nn.Module):
                     do_mask=False, 
                     return_all_blocks=True
                 )
-
-            print("ciao")
+            '''
             
             # out_list[-1] has the final, normalized features from block 11
             # But if we want a different layer:
             # If self.layer_index is None or out of range, default to final layer
-            if self.layer_index is None or self.layer_index >= len(out_list):
-                print(" !!!! Getting from CroCov2, output of last layer")
-                x = out_list[-1]  # final block, normalized by default by the previous self.model._encode_image(...)
-            else:
-                print(f" !!!! Getting from CroCov2, output of intermediate layer #{self.layer_index}")
-                x = out_list[self.layer_index-1]
+            #if self.layer_index is None or self.layer_index >= len(out_list):
+                #print(" !!!! Getting from CroCov2, output of last layer")
+                #x = out_list[-1]  # final block, normalized by default by the previous self.model._encode_image(...)
+            #else:
+                #print(f" !!!! Getting from CroCov2, output of intermediate layer #{self.layer_index}")
+                #x = out_list[self.layer_index-1]
                 # We need to explicitly normalize this intermediate layer.
                 # If we were to get the output of the final layer this would be
                 # automatically normalized, but intermediate layers are not by default.
-                x = self.model.enc_norm(x)
+                #x = self.model.enc_norm(x)
 
         # 3) reshape from (B, N, C) => (B, C, H', W')
         B, N, C = x.shape
