@@ -100,6 +100,7 @@ class CrocoFeatureExtractor(nn.Module):
                 )
 
                 if self.decoder_layer_index >= len(dec_out_list):
+                    print(f" !!!! self.decoder_layer_index is out of range --> len(dec_out_list): {len(dec_out_list)}")
                     print(" !!!! Getting from CroCov2, output of last decoder layer")
                     x = dec_out_list[-1]
                 else:
