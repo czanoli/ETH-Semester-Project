@@ -1,5 +1,8 @@
 import os
 
+base_fold = "debug/ViTBase_SmallDecoder"
+ndecblks = 9   # 12 for ViTLarge_BaseDecoder | 9 for ViTBase_Small_Decoder
+
 def read_and_average(filename):
     try:
         with open(filename, 'r') as f:
@@ -9,10 +12,10 @@ def read_and_average(filename):
         print(f"File not found: {filename}")
         return None
 
-for i in range(12):
+for i in range(ndecblks):
     dec_label = f"dec{i}"
-    mssd_file = f"mssd_errors_{dec_label}.txt"
-    mspd_file = f"mspd_errors_{dec_label}.txt"
+    mssd_file = f"{base_fold}/mssd_errors_{dec_label}.txt"
+    mspd_file = f"{base_fold}/mspd_errors_{dec_label}.txt"
 
     avg_mssd = read_and_average(mssd_file)
     avg_mspd = read_and_average(mspd_file)

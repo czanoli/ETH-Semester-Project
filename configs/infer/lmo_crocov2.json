@@ -1,6 +1,6 @@
 {
     "infer_opts": {
-        "version": "crocov2_ViTLargeBaseDecoderDecoder11",
+        "version": "crocov2_ViTBaseSmallDecoderDecoder8",
         "object_dataset": "lmo",
         "repre_version": "v1",
         "crop_rel_pad": 0.2,
@@ -9,7 +9,7 @@
             480
         ],
         "use_detections": true,
-        "extractor_name": "crocov2_CroCo_V2_ViTLarge_BaseDecoder_decoder=11",
+        "extractor_name": "crocov2_CroCo_V2_ViTBase_SmallDecoder_decoder=8",
         "grid_cell_size": 14.0,
         "match_template_type": "tfidf",
         "match_top_n_templates": 5,

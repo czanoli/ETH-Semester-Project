@@ -355,3 +355,56 @@ Blocks: [0, 1, ... 38, 39]
 
 
 --------------- Results different enc/dec blocks [Model: ViTBase_SmallDecoder]
+
+
+
+
+
+
+[CroCo_V2_ViTLarge_BaseDecoder -- decoder blocks]
+---- dec0 ----
+avg MSSD: 105.6364, avg MSPD: 135.3219
+---- dec1 ----
+avg MSSD: 101.7874, avg MSPD: 148.1669
+---- dec2 ----
+avg MSSD: 82.3488, avg MSPD: 113.4213
+---- dec3 ----
+avg MSSD: 102.8481, avg MSPD: 145.8959
+---- dec4 ----
+avg MSSD: 77.9661, avg MSPD: 103.7863
+---- dec5 ----
+avg MSSD: 79.5817, avg MSPD: 103.8899
+---- dec6 ----
+avg MSSD: 72.2093, avg MSPD: 95.4825
+---- dec7 ----
+avg MSSD: 89.6772, avg MSPD: 124.1909
+---- dec8 ----
+avg MSSD: 96.1725, avg MSPD: 141.1025
+---- dec9 ----
+avg MSSD: 95.9619, avg MSPD: 134.0451
+---- dec10 ----
+avg MSSD: 95.3023, avg MSPD: 136.6237
+---- dec11 ----
+avg MSSD: 128.9169, avg MSPD: 158.9902
+
+
+
+[CroCo_V2_ViTBase_SmallDecoder -- decoder blocks]
+---- dec0 ----
+avg MSSD: 90.3624, avg MSPD: 108.5645
+---- dec1 ----
+avg MSSD: 80.4544, avg MSPD: 107.1387
+---- dec2 ----
+avg MSSD: 65.5130, avg MSPD: 94.0877
+---- dec3 ----
+avg MSSD: 71.6280, avg MSPD: 94.2974
+---- dec4 ----
+avg MSSD: 67.8530, avg MSPD: 90.7014
+---- dec5 ----
+avg MSSD: 69.1192, avg MSPD: 103.8734
+---- dec6 ----
+avg MSSD: 64.8045, avg MSPD: 90.4373
+---- dec7 ----
+avg MSSD: 79.9747, avg MSPD: 104.7790
+---- dec8 ----
+avg MSSD: 74.0609, avg MSPD: 105.5716
