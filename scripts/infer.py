@@ -312,9 +312,6 @@ def infer(opts: InferOpts) -> None:
             bop_im_id = item_info["im_id"]
             bop_chunk_id = item_info["scene_id"]
 
-            if opts.object_dataset != "lmo":
-                continue
-
             # Get instance identifier if specified.
             inst_id = None
             if "inst_id" in item_info:
@@ -913,8 +910,6 @@ def infer(opts: InferOpts) -> None:
             results_path = os.path.join(output_dir, "estimated-poses.json")
             logger.info("Saving estimated poses to: {}".format(results_path))
             pose_evaluator.save_results_json(results_path)
-        
-        print("ciao")
 
 
 def main() -> None:

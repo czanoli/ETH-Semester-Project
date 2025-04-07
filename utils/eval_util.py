@@ -155,8 +155,8 @@ class EvaluatorPose:
             R_est, t_est, R_gt, t_gt, object_mesh_vertices, object_syms
         )
         logger.info(f"MSSD error: {mssd_e}, id: {mssd_id}")
-        with open("debug/ViTBase_SmallDecoder/mssd_errors.txt", "a") as f:
-            f.write(f"{mssd_e}\n")
+        #with open("debug/ViTBase_BaseDecoder/mssd_errors.txt", "a") as f:
+            #f.write(f"{mssd_e}\n")
 
         normalized_mssd = mssd_e / object_diameter
 
@@ -165,8 +165,8 @@ class EvaluatorPose:
             R_est, t_est, R_gt, t_gt, K, object_mesh_vertices, object_syms
         )
         logger.info(f"MSPD error : {mspd_e}, id: {mspd_id}")
-        with open("debug/ViTBase_SmallDecoder/mspd_errors.txt", "a") as f:
-            f.write(f"{mspd_e}\n")
+        #with open("debug/ViTBase_BaseDecoder/mspd_errors.txt", "a") as f:
+            #f.write(f"{mspd_e}\n")
         mspd_e = mspd_e
 
         # Object DPE metrics.

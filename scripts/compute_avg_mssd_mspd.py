@@ -1,6 +1,6 @@
 import os
 
-base_fold = "debug/ViTBase_SmallDecoder"
+base_fold = "debug/ViTBase_BaseDecoder"
 ndecblks = 9   # 12 for ViTLarge_BaseDecoder | 9 for ViTBase_Small_Decoder
 
 def read_and_average(filename):
