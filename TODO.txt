@@ -460,6 +460,11 @@ INFO:eval_bop19_pose:Done.
 
 
 
+[CroCo_V2_ViTLarge_BaseDecoder -- decoder 0]
+
+
+[CroCo_V2_ViTLarge_BaseDecoder -- decoder 1]
+
 
 [CroCo_V2_ViTLarge_BaseDecoder -- decoder 2]
 INFO:eval_bop19_pose:FINAL SCORES:
@@ -469,6 +474,16 @@ INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.3263667820069204
 INFO:eval_bop19_pose:- bop19_average_recall: 0.2158154555940023
 INFO:eval_bop19_pose:- bop19_average_time_per_image: 2.4870722603797915
 INFO:eval_bop19_pose:Evaluation took 25.182408571243286s.
+INFO:eval_bop19_pose:Done.
+
+[CroCo_V2_ViTLarge_BaseDecoder -- decoder 3]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.14965397923875431
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.16560553633217995
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.3244982698961938
+INFO:eval_bop19_pose:- bop19_average_recall: 0.21325259515570935
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 2.3279301810264585
+INFO:eval_bop19_pose:Evaluation took 21.061326026916504s.
 INFO:eval_bop19_pose:Done.
 
 [CroCo_V2_ViTLarge_BaseDecoder -- decoder 4]
@@ -511,7 +526,6 @@ INFO:eval_bop19_pose:- bop19_average_time_per_image: 2.5033576667308806
 INFO:eval_bop19_pose:Evaluation took 22.814964294433594s.
 INFO:eval_bop19_pose:Done.
 
-
 [CroCo_V2_ViTLarge_BaseDecoder -- decoder 8]
 INFO:eval_bop19_pose:FINAL SCORES:
 INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.10569550173010382
@@ -531,3 +545,42 @@ INFO:eval_bop19_pose:- bop19_average_recall: 0.16479815455594002
 INFO:eval_bop19_pose:- bop19_average_time_per_image: 2.4095644092559816
 INFO:eval_bop19_pose:Evaluation took 23.85628628730774s.
 INFO:eval_bop19_pose:Done.
+
+
+
+
+I0408 19:56:24.784 453625 eval_util.py:157] MSSD error: 399.3685601818173, id: 779
+I0408 19:56:24.785 453625 eval_util.py:167] MSPD error : 78.72526187820299, id: 5056
+
+I0408 19:56:27.68 453625 eval_util.py:157] MSSD error: 400.40425919468885, id: 325
+I0408 19:56:27.69 453625 eval_util.py:167] MSPD error : 81.37606208532671, id: 5441
+
+I0408 19:56:29.77 453625 eval_util.py:157] MSSD error: 53.582221185809516, id: 2042
+I0408 19:56:29.77 453625 eval_util.py:167] MSPD error : 15.78682518287216, id: 2191
+
+I0408 19:56:30.925 453625 eval_util.py:157] MSSD error: 22.57808160453307, id: 1362
+I0408 19:56:30.926 453625 eval_util.py:167] MSPD error : 24.19337271612839, id: 5753
+
+I0408 19:56:33.288 453625 eval_util.py:157] MSSD error: 31.875319529410397, id: 1237
+I0408 19:56:33.288 453625 eval_util.py:167] MSPD error : 12.416177433686205, id: 2422
+
+I0408 19:56:34.881 453625 eval_util.py:157] MSSD error: 44.11128843696374, id: 592
+I0408 19:56:34.881 453625 eval_util.py:167] MSPD error : 33.69107133006643, id: 3038
+
+I0408 19:56:37.402 453625 eval_util.py:157] MSSD error: 98.77094716768059, id: 5600
+I0408 19:56:37.403 453625 eval_util.py:167] MSPD error : 44.738336523214734, id: 325
+
+
+
+
+[dino, LMO, object 1, first file: entire image, second file: only segmented:]
+
+MSSD:
+Mean error of first file: 87.687659
+Mean error of second file: 68.382818
+
+MSPD:
+Mean error of first file: 76.515864
+Mean error of second file: 51.690432
+
+

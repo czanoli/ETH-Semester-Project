@@ -12,6 +12,8 @@ from typing import List, NamedTuple, Optional, Tuple
 
 import cv2
 
+from PIL import Image
+
 import numpy as np
 
 import torch
@@ -312,6 +314,9 @@ def infer(opts: InferOpts) -> None:
             bop_im_id = item_info["im_id"]
             bop_chunk_id = item_info["scene_id"]
 
+            #if bop_chunk_id != 2 or bop_im_id != 322 or int(object_lid) != 1:
+                #continue
+
             # Get instance identifier if specified.
             inst_id = None
             if "inst_id" in item_info:
@@ -498,22 +503,24 @@ def infer(opts: InferOpts) -> None:
                         interpolation=cv2.INTER_NEAREST,
                     )
 
-                    assert mask_modal.ndim == 2, "Mask must be single-channel"
-                    assert set(np.unique(mask_modal)).issubset({0, 1}), "Mask must contain only 0 and 1"
+                    # --- start extractor with only masked object
+                    onlySeg = False
+                    if onlySeg:
+                        print("\n\n !!!!!! ONLY SEGMENTATION !!!!!! \n\n")
+                        assert mask_modal.ndim == 2, "Mask must be single-channel"
+                        assert set(np.unique(mask_modal)).issubset({0, 1}), "Mask must contain only 0 and 1"
+                        masked_image = np.zeros_like(image_np_hwc)
+                        masked_image[mask_modal == 1] = image_np_hwc[mask_modal == 1]
 
-                    masked_image = np.zeros_like(image_np_hwc)
-                    masked_image[mask_modal == 1] = image_np_hwc[mask_modal == 1]
+                        # Save the result
+                        image_uint8 = (masked_image * 255).astype(np.uint8)
+                        Image.fromarray(image_uint8).save("debug/infer_masked_image_322.png")
+                    # --- end extractor with only masked object
                     
-                    # Save the result
-                    #from PIL import Image
-                    #image_uint8 = (masked_image * 255).astype(np.uint8)
-                    #Image.fromarray(image_uint8).save("debug/infer_masked_image.png")
-
                     # debug
-                    #from PIL import Image
                     #image_nphwc_uint8 = (image_np_hwc * 255).astype(np.uint8)
                     #image_modal_uint8 = (mask_modal * 255).astype(np.uint8)
-                    #Image.fromarray(image_nphwc_uint8).save("debug/image_np_hwc.png")
+                    #Image.fromarray(image_nphwc_uint8).save("debug/image_np_hwc_322.png")
                     #Image.fromarray(image_modal_uint8).save("debug/mask_model.png")
                     
 
@@ -539,7 +546,11 @@ def infer(opts: InferOpts) -> None:
                 #Image.fromarray(image_uint8).save("infer_image_np_hwc.png")
 
                 # Extract feature map from the crop.
-                image_tensor_chw = array_to_tensor(masked_image).to(torch.float32).permute(2,0,1).to(device)
+                if onlySeg:
+                    image_tensor_chw = array_to_tensor(masked_image).to(torch.float32).permute(2,0,1).to(device)
+                else:
+                    image_tensor_chw = array_to_tensor(image_np_hwc).to(torch.float32).permute(2,0,1).to(device)
+                
                 image_tensor_bchw = image_tensor_chw.unsqueeze(0)
                 
                 # Pass the image through the extractor

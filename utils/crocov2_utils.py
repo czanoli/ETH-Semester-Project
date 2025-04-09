@@ -24,12 +24,19 @@ class CrocoFeatureExtractor(nn.Module):
         if key == "layer":
             self.layer_index = int(val)
             self.decoder_layer_index = None
+            self.dpt_index = None
         elif key == "decoder":
             self.decoder_layer_index = int(val)
             self.layer_index = None
+            self.dpt_index = None
+        elif key == "dpt":
+            self.dpt_index = int(val)
+            self.layer_index = None
+            self.decoder_layer_index = None
         else:
             self.layer_index = None
             self.decoder_layer_index = None
+            self.dpt_index = None
 
         # 1) normalization (as with DINOv2) 
         self.normalize = T.Normalize(
@@ -73,7 +80,7 @@ class CrocoFeatureExtractor(nn.Module):
                 return_all_blocks=True
             )
             # Use encoder
-            if (self.decoder_layer_index is None) and (self.layer_index is not None):
+            if (self.decoder_layer_index is None) and (self.dpt_index is None) and (self.layer_index is not None):
                 if self.layer_index is None or self.layer_index >= len(enc_list_1):
                     print(" !!!! Getting from CroCov2, output of last encoder layer")
                     x = enc_list_1[-1]
@@ -81,8 +88,9 @@ class CrocoFeatureExtractor(nn.Module):
                     print(f" !!!! Getting from CroCov2, output of encoder layer #{self.layer_index}")
                     x = enc_list_1[self.layer_index - 1]
                     x = self.model.enc_norm(x)
+            
             # Use decoder
-            elif (self.decoder_layer_index is not None) and (self.layer_index is None):
+            elif (self.decoder_layer_index is not None) and (self.layer_index is None) and (self.dpt_index is None):
                 # Second encoding for decoder input (same image)
                 enc_list_2, pos2, mask2 = self.model._encode_image(
                     images,
@@ -106,6 +114,12 @@ class CrocoFeatureExtractor(nn.Module):
                 else:
                     print(f" !!!! Getting from CroCov2, output of decoder layer #{self.decoder_layer_index}")
                     x = dec_out_list[self.decoder_layer_index]
+            
+            # use dpt module
+            elif (self.decoder_layer_index is None) and (self.layer_index is None) and (self.dpt_index is not None):
+                self.model.dpt_adapter(encoder_tokens, image_size=(images.shape[0], images.shape[1]), return_features=True)
+                
+            
             else:
                 print(f" !!!! Everything is None !!!! ")
 
