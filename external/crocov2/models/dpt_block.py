@@ -447,4 +447,10 @@ class DPTOutputAdapter(nn.Module):
         # Output head
         out = self.head(path_1)
 
-        return out
+        return {
+        'out': out,
+        'path_1': path_1,
+        'path_2': path_2,
+        'path_3': path_3,
+        'path_4': path_4
+        }

@@ -14,7 +14,7 @@ from utils import dinov2_utils, crocov2_utils
 logger: logging.Logger = logging.get_logger()
 
 
-def make_feature_extractor(model_name: str) -> torch.nn.Module:
+def make_feature_extractor(model_name: str, use_dpt: bool) -> torch.nn.Module:
 
     if model_name.startswith("dinov2_"):
         print("!!! Using: ", model_name)
@@ -23,7 +23,7 @@ def make_feature_extractor(model_name: str) -> torch.nn.Module:
     elif model_name.startswith("crocov2_"):
         print("!!! Using: ", model_name)
         print("\n !!! model_name in make_feature_extractor:", model_name)
-        return crocov2_utils.CrocoFeatureExtractor(model_name=model_name)
+        return crocov2_utils.CrocoFeatureExtractor(model_name=model_name, use_dpt=use_dpt)
     else:
         raise NotImplementedError(model_name)
 

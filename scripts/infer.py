@@ -110,6 +110,7 @@ class InferOpts(NamedTuple):
     extractor_name: str = "dinov2_vitl14"
     grid_cell_size: float = 1.0
     max_num_queries: int = 1000000
+    use_dpt: bool = False
 
     # Feature matching options.
     match_template_type: str = "tfidf"
@@ -169,7 +170,7 @@ def infer(opts: InferOpts) -> None:
 
     # Prepare feature extractor.
     print("\n !!! The opts.extractor_name in infer() is: ", opts.extractor_name)
-    extractor = feature_util.make_feature_extractor(opts.extractor_name)
+    extractor = feature_util.make_feature_extractor(opts.extractor_name, opts.use_dpt)
     # Prepare a device.
     device = "cuda" if torch.cuda.is_available() else "cpu"
     extractor.to(device)
@@ -504,7 +505,7 @@ def infer(opts: InferOpts) -> None:
                     )
 
                     # --- start extractor with only masked object
-                    onlySeg = False
+                    onlySeg = True
                     if onlySeg:
                         print("\n\n !!!!!! ONLY SEGMENTATION !!!!!! \n\n")
                         assert mask_modal.ndim == 2, "Mask must be single-channel"
@@ -557,14 +558,16 @@ def infer(opts: InferOpts) -> None:
                 extractor_output = extractor(image_tensor_bchw)
                 feature_map_chw = extractor_output["feature_maps"][0]
 
-                #from utils import vis_util
-                #feature_map = vis_util.vis_pca_feature_map(
-                    #feature_map_chw=feature_map_chw,
-                    #image_height=image_np_hwc.shape[0],
-                    #image_width=image_np_hwc.shape[1],
-                    #pca_projector=repre.feat_vis_projectors[0],
-                #)
-                #Image.fromarray(feature_map).save("debug/infer_featuremap.png")
+                # -- start vis for debug
+                from utils import vis_util
+                feature_map = vis_util.vis_pca_feature_map(
+                    feature_map_chw=feature_map_chw,
+                    image_height=image_np_hwc.shape[0],
+                    image_width=image_np_hwc.shape[1],
+                    pca_projector=repre.feat_vis_projectors[0],
+                )
+                Image.fromarray(feature_map).save("debug/dpt_featmap3.png")
+                # -- end vis for debug
 
                 times["feat_extract"] = timer.elapsed("Time for feature extraction")
                 timer.start()

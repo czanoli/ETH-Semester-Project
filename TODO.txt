@@ -584,3 +584,39 @@ Mean error of first file: 76.515864
 Mean error of second file: 51.690432
 
 
+
+
+
+
+
+
+11, 10:
+T: 480x480, 16
+GR: 16, 2048
+I:
+{
+    "infer_opts": {
+        "version": "crocov2_ViTLargeBaseDecoderDecoder6",
+        "object_dataset": "lmo",
+        "repre_version": "v1",
+        "crop_rel_pad": 1,
+        "crop_size": [
+            480,
+            480
+        ],
+        "use_detections": true,
+        "extractor_name": "crocov2_CroCo_V2_ViTLarge_BaseDecoder_decoder=6",
+        "use_dpt": false,
+        "grid_cell_size": 16.0,
+        "match_template_type": "tfidf",
+        "match_top_n_templates": 5,
+        "match_feat_matching_type": "cyclic_buddies",
+        "match_top_k_buddies": 300,
+        "pnp_type": "opencv",
+        "pnp_ransac_iter": 400,
+        "pnp_inlier_thresh": 10.0,
+        "final_pose_type": "best_coarse",
+        "num_preds_factor": 1,
+        "vis_results": true
+    }
+}

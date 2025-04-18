@@ -45,6 +45,7 @@ class GenRepreOpts(NamedTuple):
     # Feature extraction options.
     extractor_name: str = "dinov2_vits14_reg"
     grid_cell_size: float = 14.0
+    use_dpt: bool = False
 
     # Feature PCA options.
     apply_pca: bool = True
@@ -257,7 +258,7 @@ def generate_repre(
     # Prepare a feature extractor.
     if extractor is None:
         print("\n !!! opts.extractor_name in generate_repre() is: ", opts.extractor_name)
-        extractor = feature_util.make_feature_extractor(opts.extractor_name)
+        extractor = feature_util.make_feature_extractor(opts.extractor_name, opts.use_dpt)
     extractor.to(device)
 
     timer.elapsed("Time for preparation")
@@ -397,7 +398,7 @@ def generate_repre_from_list(opts: GenRepreOpts) -> None:
         object_lids = bop_model_props["obj_ids"]
 
     # Prepare a feature extractor.
-    extractor = feature_util.make_feature_extractor(opts.extractor_name)
+    extractor = feature_util.make_feature_extractor(opts.extractor_name, opts.use_dpt)
 
     print("GenRepreOpts:")
     for field_name, field_value in opts._asdict().items():

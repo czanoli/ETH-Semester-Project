@@ -230,6 +230,8 @@ def tiled_pred(model, criterion, img1, img2, gt,
     for sy1, sx1, sy2, sx2, aligned in crop_generator():
         # compute optical flow there
         pred =  model(_crop(img1,sy1,sx1), _crop(img2,sy2,sx2))
+        pred = model(_crop(img1,sy1,sx1))
+        pred = pred["out"]
         pred, predconf = split_prediction_conf(pred, with_conf=with_conf)
         
         if gt is not None: gtcrop = _crop(gt,sy1,sx1)

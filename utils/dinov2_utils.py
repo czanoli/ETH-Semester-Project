@@ -135,9 +135,6 @@ class DinoFeatureExtractor(nn.Module):
                 facet=self.facet,
             )
 
-
-        print("!!!!!!!!!! test !!!!!!!!!!!!!")
-
         # CLS tokens of size Bx1xD.
         cls_tokens = outputs["cls_tokens"][:, 0, :, :]
 
@@ -279,8 +276,8 @@ class DinoFeatureExtractor(nn.Module):
         W_pixels = self.num_patches[1] * self.stride
         feature_depth = self._feats[0].shape[-1] if self._feats else "Unknown"
         # Print both patch resolution and spatial resolution
-        print(f"Layer {layers}: Patch Resolution = {self.num_patches} (num_patches_h, num_patches_w)")
-        print(f"Layer {layers}: Spatial Resolution = ({H_pixels}, {W_pixels}, {feature_depth}) (H, W, C)")
+        #print(f"Layer {layers}: Patch Resolution = {self.num_patches} (num_patches_h, num_patches_w)")
+        #print(f"Layer {layers}: Spatial Resolution = ({H_pixels}, {W_pixels}, {feature_depth}) (H, W, C)")
         # ---- end debug shapes
 
         return self._feats
