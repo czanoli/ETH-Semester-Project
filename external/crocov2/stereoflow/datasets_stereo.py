@@ -42,7 +42,7 @@ cache_dir = "./data/stereoflow/datasets_stereo_cache/"
 in1k_mean = torch.tensor([0.485, 0.456, 0.406]).view(3,1,1)
 in1k_std =  torch.tensor([0.229, 0.224, 0.225]).view(3,1,1)
 def img_to_tensor(img):
-    img = torch.from_numpy(img).permute(2, 0, 1).float() / 255.
+    img = torch.from_numpy(img.copy()).permute(2, 0, 1).float() / 255.
     img = (img-in1k_mean)/in1k_std
     return img
 def disp_to_tensor(disp):

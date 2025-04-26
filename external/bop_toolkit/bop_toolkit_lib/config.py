@@ -15,10 +15,10 @@ else:
     datasets_path = r"/path/to/bop/datasets"
 
 # Folder with pose results to be evaluated.
-results_path = r"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/inference/lmo_vanilla_vitl14_18_onlySegmented/"
+results_path = r"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/inference/lmo_best_lmo_obj1:322_MSSD10_MSPD11/"
 
 # Folder for the calculated pose errors and performance scores.
-eval_path = r"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/inference/lmo_vanilla_vitl14_18_onlySegmented/"
+eval_path = r"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/inference/lmo_best_lmo_obj1:322_MSSD10_MSPD11/"
 
 ######## Extended ########
 

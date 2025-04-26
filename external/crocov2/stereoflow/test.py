@@ -16,7 +16,7 @@ import torch
 from torch.utils.data import DataLoader
 
 import utils.misc as misc
-from models.croco_downstream import CroCoDownstreamMonocularEncoder
+from models.croco_downstream import CroCoDownstreamMonocularEncoder, CroCoDownstreamBinocular
 from models.head_downstream import PixelwiseTaskWithDPT
 
 from stereoflow.criterion import *
@@ -49,9 +49,10 @@ def get_args_parser():
     
     
 def _load_model_and_criterion(model_path, do_load_metrics, device):
-    print('loading model from', model_path)
-    assert os.path.isfile(model_path)
-    ckpt = torch.load(model_path, 'cpu')
+    full_model_path = os.path.join(os.getcwd(), model_path)
+    print('loading model from', full_model_path)
+    assert os.path.isfile(full_model_path)
+    ckpt = torch.load(full_model_path, 'cpu')
     
     ckpt_args = ckpt['args']
     task = ckpt_args.task
@@ -63,8 +64,9 @@ def _load_model_and_criterion(model_path, do_load_metrics, device):
     head = PixelwiseTaskWithDPT()
     head.num_channels = num_channels
     print('croco_args:', ckpt_args.croco_args)
+    #model = CroCoDownstreamBinocular(head, **ckpt_args.croco_args)
     model = CroCoDownstreamMonocularEncoder(head, **ckpt_args.croco_args)
-    msg = model.load_state_dict(ckpt['model'], strict=True)
+    #msg = model.load_state_dict(ckpt['model'], strict=True)
     model.eval()
     model = model.to(device)
     

@@ -176,6 +176,39 @@ def _resize_stereo_or_flow(data, new_size):
     
 
 @torch.no_grad()
+def get_dpt_outputs(model, img1, img2, gt,
+               overlap=0.5, crop=512):
+    
+    B, _, H, W = img1.shape
+    win_height, win_width = crop[0], crop[1]
+    win_height, win_width = crop[0], crop[1]
+    
+    # upscale to be larger than the crop
+    do_change_scale =  H<win_height or W<win_width
+    if do_change_scale: 
+        upscale_factor = max(win_width/W, win_height/W)
+        new_size = (round(H*upscale_factor),round(W*upscale_factor))
+        img1 = _resize_img(img1, new_size)
+        img2 = _resize_img(img2, new_size)
+        # resize gt just for the computation of tiled losses
+        if gt is not None: gt = _resize_stereo_or_flow(gt, new_size)
+        H,W = img1.shape[2:4]
+
+    def crop_generator():
+        for sy in _overlapping(H, win_height, overlap):
+          for sx in _overlapping(W, win_width, overlap):
+            yield sy, sx, sy, sx, True
+
+    # Since I am using the CroCoDownstreamMonocularEncoder I am returning pred using only img1. 
+    # Here img2 is the same as img1 but not used.
+    # In co-ops work img1 is the query image, img2 is the rendered best pose estimate from coarse pipeline.
+    for sy1, sx1, sy2, sx2, aligned in crop_generator():
+        pred = model(_crop(img1,sy1,sx1))
+        
+    return pred
+
+
+@torch.no_grad()
 def tiled_pred(model, criterion, img1, img2, gt,
                overlap=0.5, bad_crop_thr=0.05,
                downscale=False, crop=512, ret='loss',
@@ -229,7 +262,7 @@ def tiled_pred(model, criterion, img1, img2, gt,
 
     for sy1, sx1, sy2, sx2, aligned in crop_generator():
         # compute optical flow there
-        pred =  model(_crop(img1,sy1,sx1), _crop(img2,sy2,sx2))
+        #pred =  model(_crop(img1,sy1,sx1), _crop(img2,sy2,sx2))
         pred = model(_crop(img1,sy1,sx1))
         pred = pred["out"]
         pred, predconf = split_prediction_conf(pred, with_conf=with_conf)
