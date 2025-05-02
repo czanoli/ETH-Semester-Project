@@ -14,7 +14,7 @@ logger: logging.Logger = logging.get_logger()
 
 # Load the estimated poses from the json file
 object_dataset = "lmo"
-version = "best_lmo_obj1:322_MSSD10_MSPD11"
+version = "best_lmo_obj1:322_dpt_adaptive"
 object_lids = [1,5,6,8,9,10,11,12]
 
 signature = misc.slugify(object_dataset) + "_{}".format(version)

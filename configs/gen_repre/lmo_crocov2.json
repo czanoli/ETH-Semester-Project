@@ -1,7 +1,7 @@
 {
     "gen_repre_opts": {
-        "version": "best_lmo_obj1:322_MSSD10_MSPD11",
-        "use_dpt": false,
+        "version": "best_lmo_obj1:322_dpt_adaptive",
+        "use_dpt": true,
         "templates_version": "best_lmo_obj1:322_MSSD10_MSPD11",
         "object_dataset": "lmo",
         "object_lids": [1,5,6,8,9,10,11,12],

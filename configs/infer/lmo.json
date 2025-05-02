@@ -2,7 +2,7 @@
     "infer_opts": {
         "version": "vanilla_vitl14_18",
         "object_dataset": "lmo",
-        "repre_version": "v2",
+        "repre_version": "vanilla_vitl14_18",
         "crop_rel_pad": 0.2,
         "crop_size": [
             420,

@@ -11,6 +11,7 @@ from external.crocov2.models.dpt_block import DPTOutputAdapter
 from external.crocov2.stereoflow.test import _load_model_and_criterion
 from external.crocov2.stereoflow.engine import tiled_pred
 
+'''
 # class used for combining the DPT module with decoder
 class FeatureFusion(nn.Module):
     """
@@ -196,6 +197,209 @@ class FeatureFusion(nn.Module):
         
         else:
             raise ValueError(f"Unsupported fusion method: {self.fusion_method}")
+'''
+
+def fusion_module(decoder_output, dpt_pred, confidence=None, fusion_type='adaptive', scale_factor=None):
+    """
+    Fuses decoder block output with DPT prediction in a training-free approach.
+    
+    Args:
+        decoder_output: Tensor of shape [B, 768, H_d, W_d] (e.g., [1, 768, 30, 30])
+        dpt_pred: Tensor of shape [B, C_dpt, H_dpt, W_dpt] from DPT prediction 
+        confidence: Tensor of shape [B, H_dpt, W_dpt] with confidence values (optional)
+        fusion_type: Strategy for fusion ('adaptive', 'normalization', 'attention', 'direct')
+        scale_factor: If provided, rescales output to this factor of decoder size
+    
+    Returns:
+        fused_features: Feature map combining decoder and DPT information
+    """
+    # Get dimensions
+    batch_size, decoder_channels, dec_h, dec_w = decoder_output.shape
+    _, dpt_channels, dpt_h, dpt_w = dpt_pred.shape
+    
+    # Determine target size (default to decoder size)
+    target_h, target_w = dec_h, dec_w
+    if scale_factor is not None:
+        target_h = int(dec_h * scale_factor)
+        target_w = int(dec_w * scale_factor)
+    
+    # Resize DPT prediction to match decoder output size for processing
+    dpt_resized = F.interpolate(dpt_pred, size=(dec_h, dec_w), mode='bilinear', align_corners=False)
+    
+    # If confidence is None but dpt_pred has a channel that is confidence
+    if confidence is None and dpt_channels > 1:
+        confidence = dpt_pred[:, -1:, :, :]  # Take last channel
+        dpt_resized = dpt_resized[:, :-1, :, :]  # Remove confidence channel from prediction
+    
+    # If we have explicit confidence, resize it too
+    if confidence is not None and confidence.dim() > 3:  # If confidence is [B, 1, H, W]
+        conf_resized = F.interpolate(confidence, size=(dec_h, dec_w), mode='bilinear', align_corners=False)
+        conf_values = conf_resized.squeeze(1)  # Remove channel dim if present
+    elif confidence is not None:  # If confidence is [B, H, W]
+        conf_resized = F.interpolate(confidence.unsqueeze(1), size=(dec_h, dec_w), mode='bilinear', align_corners=False)
+        conf_values = conf_resized.squeeze(1)
+    else:
+        # Create uniform confidence if none provided
+        conf_values = torch.ones(batch_size, dec_h, dec_w, device=decoder_output.device)
+    
+    # Projection for DPT features to match decoder dimensionality
+    # Using 1x1 convolution equivalent with torch.einsum for training-free approach
+    dpt_projected = torch.zeros_like(decoder_output)
+    if dpt_resized.shape[1] > 1:  # If DPT has multiple channels
+        # Repeat DPT channels to match decoder channels
+        repeat_factor = decoder_channels // dpt_resized.shape[1]
+        if repeat_factor > 0:
+            dpt_projected = dpt_resized.repeat(1, repeat_factor, 1, 1)
+            # If not exact division, pad the remaining channels
+            if dpt_projected.shape[1] < decoder_channels:
+                padding = decoder_channels - dpt_projected.shape[1]
+                dpt_projected = torch.cat([
+                    dpt_projected, 
+                    dpt_resized[:, :padding, :, :]
+                ], dim=1)
+        else:
+            # If DPT has more channels than needed, take the first decoder_channels
+            dpt_projected = dpt_resized[:, :decoder_channels, :, :]
+    else:
+        # If DPT has single channel, broadcast it across all decoder channels
+        dpt_projected = dpt_resized.expand(-1, decoder_channels, -1, -1)
+    
+    # Different fusion strategies
+    if fusion_type == 'adaptive':
+        print("\n!! ADAPTIVE !!\n")
+        # Confidence-weighted fusion
+        conf_expanded = conf_values.unsqueeze(1).expand_as(decoder_output)
+        fused_features = decoder_output * (1 - conf_expanded) + dpt_projected * conf_expanded
+    
+    elif fusion_type == 'normalization':
+        print("\n!! NORMALIZATION !!\n")
+        # Channel-wise normalization and weighted combination
+        decoder_norm = F.normalize(decoder_output, p=2, dim=1)
+        dpt_norm = F.normalize(dpt_projected, p=2, dim=1)
+        
+        # Use confidence as weight between normalized features
+        conf_expanded = conf_values.unsqueeze(1).expand_as(decoder_output)
+        fused_features = decoder_norm * (1 - conf_expanded) + dpt_norm * conf_expanded
+    
+    elif fusion_type == 'attention':
+        print("\n!! ATTENTION !!\n")
+        # Compute a similarity map between decoder and DPT features
+        decoder_flat = decoder_output.view(batch_size, decoder_channels, -1)
+        dpt_flat = dpt_projected.view(batch_size, decoder_channels, -1)
+        
+        # Normalize features for dot product similarity
+        decoder_norm = F.normalize(decoder_flat, p=2, dim=1)
+        dpt_norm = F.normalize(dpt_flat, p=2, dim=1)
+        
+        # Compute attention weights (similarity between features)
+        attention = torch.bmm(decoder_norm.transpose(1, 2), dpt_norm)  # [B, H*W, H*W]
+        attention = F.softmax(attention, dim=2)
+        
+        # Apply attention
+        attended_features = torch.bmm(dpt_flat, attention.transpose(1, 2))
+        attended_features = attended_features.view(batch_size, decoder_channels, dec_h, dec_w)
+        
+        # Combine with original features
+        conf_expanded = conf_values.unsqueeze(1).expand_as(decoder_output)
+        fused_features = decoder_output * (1 - conf_expanded) + attended_features * conf_expanded
+    
+    elif fusion_type == 'direct':
+        print("\n!! DIRECT !!\n")
+        # Direct addition with confidence weighting
+        fused_features = decoder_output + dpt_projected * conf_values.unsqueeze(1)
+    
+    else:
+        raise ValueError(f"Unsupported fusion type: {fusion_type}")
+    
+    # Resize to target size if needed
+    if (target_h, target_w) != (dec_h, dec_w):
+        fused_features = F.interpolate(fused_features, size=(target_h, target_w), 
+                                      mode='bilinear', align_corners=False)
+    
+    return fused_features
+
+
+def tiled_fusion(decoder_output, dpt_pred, confidence=None, tile_size=704, overlap=0.9, fusion_type='adaptive'):
+    """
+    Performs tiled fusion for large feature maps to avoid memory issues.
+    
+    Args:
+        decoder_output: Tensor of shape [B, 768, H_d, W_d]
+        dpt_pred: Tensor of shape [B, C_dpt, H_dpt, W_dpt]
+        confidence: Optional confidence map
+        tile_size: Maximum tile size for processing
+        overlap: Overlap between tiles (0-1)
+        fusion_type: Type of fusion to apply
+        
+    Returns:
+        Fused feature map
+    """
+    # Get dimensions
+    batch_size, decoder_channels, dec_h, dec_w = decoder_output.shape
+    
+    # If small enough, process directly
+    if dec_h <= tile_size and dec_w <= tile_size:
+        return fusion_module(decoder_output, dpt_pred, confidence, fusion_type)
+    
+    # Calculate tile dimensions with overlap
+    stride_h = int(tile_size * (1 - overlap))
+    stride_w = int(tile_size * (1 - overlap))
+    
+    # Initialize output tensor and weight accumulator
+    fused_output = torch.zeros_like(decoder_output)
+    weight_accumulator = torch.zeros((batch_size, 1, dec_h, dec_w), device=decoder_output.device)
+    
+    # Process each tile
+    for y in range(0, dec_h, stride_h):
+        for x in range(0, dec_w, stride_w):
+            # Calculate tile boundaries
+            end_y = min(y + tile_size, dec_h)
+            end_x = min(x + tile_size, dec_w)
+            
+            # Extract tile from decoder output
+            decoder_tile = decoder_output[:, :, y:end_y, x:end_x]
+            
+            # Calculate corresponding region in DPT prediction
+            y_ratio = dpt_pred.shape[2] / dec_h
+            x_ratio = dpt_pred.shape[3] / dec_w
+            
+            dpt_y = int(y * y_ratio)
+            dpt_x = int(x * x_ratio)
+            dpt_end_y = int(end_y * y_ratio)
+            dpt_end_x = int(end_x * x_ratio)
+            
+            dpt_tile = dpt_pred[:, :, dpt_y:dpt_end_y, dpt_x:dpt_end_x]
+            
+            # Extract confidence tile if provided
+            conf_tile = None
+            if confidence is not None:
+                if confidence.dim() == 3:  # [B, H, W]
+                    conf_tile = confidence[:, dpt_y:dpt_end_y, dpt_x:dpt_end_x]
+                else:  # [B, 1, H, W]
+                    conf_tile = confidence[:, :, dpt_y:dpt_end_y, dpt_x:dpt_end_x]
+            
+            # Process tile
+            fused_tile = fusion_module(decoder_tile, dpt_tile, conf_tile, fusion_type)
+            
+            # Create weight mask for smooth blending (higher in center, lower at edges)
+            h, w = end_y - y, end_x - x
+            y_weights = torch.linspace(0, 1, h//2, device=decoder_output.device)
+            y_weights = torch.cat([y_weights, torch.flip(y_weights, [0])]) if h % 2 == 0 else torch.cat([y_weights, torch.flip(y_weights[:-1], [0])])
+            
+            x_weights = torch.linspace(0, 1, w//2, device=decoder_output.device)
+            x_weights = torch.cat([x_weights, torch.flip(x_weights, [0])]) if w % 2 == 0 else torch.cat([x_weights, torch.flip(x_weights[:-1], [0])])
+            
+            weight_mask = y_weights.view(-1, 1) * x_weights.view(1, -1)
+            weight_mask = weight_mask.view(1, 1, h, w)
+            
+            # Apply weights and add to output
+            fused_output[:, :, y:end_y, x:end_x] += fused_tile * weight_mask
+            weight_accumulator[:, :, y:end_y, x:end_x] += weight_mask
+    
+    # Normalize by weights
+    fused_output = fused_output / (weight_accumulator + 1e-8)
+    
+    return fused_output
 
 
 class CrocoFeatureExtractor(nn.Module):
@@ -232,7 +436,7 @@ class CrocoFeatureExtractor(nn.Module):
             self.layer_index = None
             if self.is_dpt:
                 self.dpt_index = 'out'  # DPT index
-                self.feature_fusion = FeatureFusion(fusion_method="attention", hidden_dim=768)
+                #self.feature_fusion = FeatureFusion(fusion_method="attention", hidden_dim=768)
             else:
                 self.dpt_index = None
         else:
@@ -382,7 +586,7 @@ class CrocoFeatureExtractor(nn.Module):
                 
                 if self.is_dpt:
                     # --- For DPT pipeline ---
-                    tile_overlap = 0.9
+                    tile_overlap = 0.97
                     use_gpu = torch.cuda.is_available() and torch.cuda.device_count()>0
                     device = torch.device('cuda:0' if use_gpu else 'cpu')
                     model, _, cropsize, with_conf, task, tile_conf_mode = _load_model_and_criterion('external/crocov2/stereoflow_models/crocostereo.pth', None, device)
@@ -390,11 +594,11 @@ class CrocoFeatureExtractor(nn.Module):
                     im2 = images.to(device)
 
                     # Resize image
-                    im1 = F.interpolate(im1, size=(2112, 2112), mode='bilinear', align_corners=False)
-                    im2 = F.interpolate(im2, size=(2112, 2112), mode='bilinear', align_corners=False)
+                    #im1 = F.interpolate(im1, size=(2112, 2112), mode='bilinear', align_corners=False)
+                    #im2 = F.interpolate(im2, size=(2112, 2112), mode='bilinear', align_corners=False)
 
                     with torch.inference_mode():
-                        pred, _, _ = tiled_pred(model, None, im1, im2, None, conf_mode=tile_conf_mode, overlap=tile_overlap, crop=cropsize, with_conf=with_conf, return_time=False)
+                        pred, _, c, preds = tiled_pred(model, None, im1, im2, None, conf_mode=tile_conf_mode, overlap=tile_overlap, crop=cropsize, with_conf=with_conf, return_time=False)
 
                     # Select the appropriate path based on dpt_index
                     #dpt_paths = [dpt_outputs['path_4'], dpt_outputs['path_3'], 
@@ -416,8 +620,15 @@ class CrocoFeatureExtractor(nn.Module):
                     dec_featmap = x.reshape(B, h_p, w_p, C).permute(0, 3, 1, 2)
 
                     # Combine decoder featmap with dpt module output
-                    # TODO: need to modify the featur fusion class given that now I'm using the torch 1x3x2212x2212 wihich represent a confidence [?]
-                    feature_maps = self.feature_fusion(dec_featmap, pred, None)
+                    #feature_maps = self.feature_fusion(dec_featmap, pred, None)
+                    
+                    # Fuse decoder features with DPT prediction
+                    feature_maps = fusion_module(
+                        decoder_output=dec_featmap,
+                        dpt_pred=pred,
+                        confidence=c,
+                        fusion_type='adaptive'
+                    )
 
                     # --- [OLD] Start of dpt tests
                     #all_features = enc_list_1 + dec_out_list

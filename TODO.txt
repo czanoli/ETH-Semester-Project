@@ -620,3 +620,71 @@ I:
         "vis_results": true
     }
 }
+
+
+
+
+fused_adaptive_v2
+0427 12:09:15.864 7121 template_util.py:199] Matched templates: [42, 10, 187, 19, 54]
+I0427 12:09:15.864 7121 misc.py:41] Time for template matching: 0.06262s
+I0427 12:09:15.888 7121 misc.py:41] Time for establishing corresp: 0.02372s
+I0427 12:09:15.888 7121 misc.py:41] Time for corresp: 0.08702s
+I0427 12:09:15.889 7121 infer.py:656] Number of corresp: [152, 152, 152, 152, 152]
+I0427 12:09:15.912 7121 infer.py:686] Quality of coarse pose 0: 11.0
+I0427 12:09:15.932 7121 infer.py:686] Quality of coarse pose 1: 15.0
+I0427 12:09:15.953 7121 infer.py:686] Quality of coarse pose 2: 13.0
+I0427 12:09:15.974 7121 infer.py:686] Quality of coarse pose 3: 21.0
+I0427 12:09:15.998 7121 infer.py:686] Quality of coarse pose 4: 10.0
+I0427 12:09:16.32 7121 eval_util.py:157] MSSD error: 252.6860773115309, id: 4299
+I0427 12:09:16.33 7121 eval_util.py:167] MSPD error : 314.69411434278123, id: 5307
+
+
+I0427 12:23:54.141 8513 template_util.py:199] Matched templates: [10, 42, 19, 187, 11]
+I0427 12:23:54.141 8513 misc.py:41] Time for template matching: 0.04417s
+I0427 12:23:54.150 8513 misc.py:41] Time for establishing corresp: 0.00881s
+I0427 12:23:54.150 8513 misc.py:41] Time for corresp: 0.05349s
+I0427 12:23:54.151 8513 infer.py:656] Number of corresp: [152, 152, 152, 152, 152]
+I0427 12:23:54.172 8513 infer.py:686] Quality of coarse pose 0: 16.0
+I0427 12:23:54.189 8513 infer.py:686] Quality of coarse pose 1: 11.0
+I0427 12:23:54.206 8513 infer.py:686] Quality of coarse pose 2: 18.0
+I0427 12:23:54.224 8513 infer.py:686] Quality of coarse pose 3: 15.0
+I0427 12:23:54.242 8513 infer.py:686] Quality of coarse pose 4: 13.0
+I0427 12:23:54.242 8513 misc.py:41] Time for coarse pose: 0.09194s
+I0427 12:23:54.243 8513 misc.py:41] Time for selecting final pose: 0.00001s
+I0427 12:23:54.243 8513 logging.py:117] --------------------------------------------------------------------------------
+I0427 12:23:54.243 8513 logging.py:118] SUMMARY - success: 1, time: 75.1699s
+I0427 12:23:54.243 8513 logging.py:119] --------------------------------------------------------------------------------
+I0427 12:23:54.258 8513 eval_util.py:157] MSSD error: 216.3806968861525, id: 4299
+I0427 12:23:54.259 8513 eval_util.py:167] MSPD error : 303.3666655629388, id: 4284
+
+
+
+---> decoder 6:
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.16797923875432527
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.1950865051903114
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.37051903114186857
+INFO:eval_bop19_pose:- bop19_average_recall: 0.2445282583621684
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 6.687027950286865
+INFO:eval_bop19_pose:Evaluation took 22.946948051452637s.
+
+
+
+
+--- run gen repre for adaptive
+--- ablate large model, look for feature map of 322 most similar to that of dino
+--- => run gen repre for that layer/decoder and infer
+--- => run gen repre with that layer/decoder and infer for DPT version
+
+-------> dpt version (decoder=6):
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.13395847750865053
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.15847750865051907
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.32089965397923875
+INFO:eval_bop19_pose:- bop19_average_recall: 0.20444521337946944
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 33.00958295226097
+INFO:eval_bop19_pose:Evaluation took 25.45333743095398s.
+INFO:eval_bop19_pose:Done.
+
+
+

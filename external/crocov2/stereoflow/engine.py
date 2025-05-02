@@ -263,8 +263,8 @@ def tiled_pred(model, criterion, img1, img2, gt,
     for sy1, sx1, sy2, sx2, aligned in crop_generator():
         # compute optical flow there
         #pred =  model(_crop(img1,sy1,sx1), _crop(img2,sy2,sx2))
-        pred = model(_crop(img1,sy1,sx1))
-        pred = pred["out"]
+        preds = model(_crop(img1,sy1,sx1))
+        pred = preds["out"]
         pred, predconf = split_prediction_conf(pred, with_conf=with_conf)
         
         if gt is not None: gtcrop = _crop(gt,sy1,sx1)
@@ -296,7 +296,7 @@ def tiled_pred(model, criterion, img1, img2, gt,
     
     if return_time:
         return pred, torch.mean(torch.tensor(tiled_losses)), c, time
-    return pred, torch.mean(torch.tensor(tiled_losses)), c
+    return pred, torch.mean(torch.tensor(tiled_losses)), c, preds
 
 
 def _overlapping(total, window, overlap=0.5):

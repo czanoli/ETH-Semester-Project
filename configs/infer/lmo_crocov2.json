@@ -1,8 +1,8 @@
 {
     "infer_opts": {
-        "version": "best_lmo_obj1:322_MSSD10_MSPD11",
+        "version": "best_lmo_obj1:322_dpt_adaptive",
         "object_dataset": "lmo",
-        "repre_version": "best_lmo_obj1:322_MSSD10_MSPD11",
+        "repre_version": "best_lmo_obj1:322_dpt_adaptive",
         "crop_rel_pad": 0.2,
         "crop_size": [
             480,

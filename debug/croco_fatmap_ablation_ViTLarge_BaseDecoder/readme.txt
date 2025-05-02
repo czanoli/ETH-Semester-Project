@@ -1,0 +1,1 @@
+obj 1, number 322, LMO, scene 2

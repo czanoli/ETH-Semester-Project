@@ -153,14 +153,38 @@ def synthesize_templates(opts: GenTemplatesOpts) -> None:
         viewsphere_radii.append(min_depth + (depth_cell_id + 0.5) * depth_cell_size)
 
     # Generate viewpoints from which the object model will be rendered.
-    views_sphere = []
+    #views_sphere = []
+    #for radius in viewsphere_radii:
+        #views_sphere += foundpose_misc.sample_views(
+            #min_n_views=opts.min_num_viewpoints,
+            #radius=radius,
+            #mode="fibonacci",
+        #)[0]
+    #logger.info(f"Sampled points on the sphere: {len(views_sphere)}")
+
+    # --- New Generate viewpoints and retrieve only those from the upper half-sphere.
     for radius in viewsphere_radii:
-        views_sphere += foundpose_misc.sample_views(
+        all_views, _ = foundpose_misc.sample_views(
             min_n_views=opts.min_num_viewpoints,
             radius=radius,
             mode="fibonacci",
-        )[0]
-    logger.info(f"Sampled points on the sphere: {len(views_sphere)}")
+        )
+        
+        # Filter views from upper hemisphere (camera is above the object)
+        views_sphere = [
+            v for v in all_views
+            if v["t"][2] > 0  # z > 0 means camera is above the object (looking down)
+        ]
+
+        # No rotation and no translation view
+        #R_identity = np.eye(3)
+        #t_zero = np.zeros(3)
+        #neutral_view = {
+            #"R": R_identity,
+            #"t": t_zero
+        #}
+        #views_sphere.append(neutral_view)
+    # --- End New
 
     # Add in-plane rotations.
     if opts.num_inplane_rotations == 1:

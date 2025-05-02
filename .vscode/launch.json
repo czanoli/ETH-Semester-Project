@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Python Debugger: gen_repre",
             "type": "debugpy",
@@ -52,5 +53,22 @@
                 "PYTHONPATH": "${workspaceFolder}/scripts:${workspaceFolder}/external/bop_toolkit:${workspaceFolder}/external/dinov2:${workspaceFolder}/external/crocov2:${env:PYTHONPATH}"
             }
         },
+        {
+            "name": "Python Debugger: gentemplates",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "scripts/gen_templates.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--opts-path",
+                "configs/gen_templates/lmo.json"
+            ],
+            "python": "/home/tatiana/anaconda3/envs/foundpose_cpu/bin/python",
+            "env":{
+                "REPO_PATH": "/home/tatiana/chris-sem-prj/ETH-Semester-Project",
+                "BOP_PATH": "/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets",
+                "PYTHONPATH": "${workspaceFolder}/scripts:${workspaceFolder}/external/bop_toolkit:${workspaceFolder}/external/dinov2:${workspaceFolder}/external/crocov2:${env:PYTHONPATH}"
+            }
+        }
     ]
 }

@@ -315,8 +315,8 @@ def infer(opts: InferOpts) -> None:
             bop_im_id = item_info["im_id"]
             bop_chunk_id = item_info["scene_id"]
 
-            if bop_chunk_id != 2 or bop_im_id != 322 or int(object_lid) != 1:
-                continue
+            #if bop_chunk_id != 2 or bop_im_id != 36 or int(object_lid) != 9:
+                #continue
 
             # Get instance identifier if specified.
             inst_id = None
@@ -566,7 +566,9 @@ def infer(opts: InferOpts) -> None:
                     image_width=image_np_hwc.shape[1],
                     pca_projector=repre.feat_vis_projectors[0],
                 )
-                Image.fromarray(feature_map).save("debug/fused_concat_v1.png")
+
+                extension = opts.extractor_name.split("_")[-1]
+                Image.fromarray(feature_map).save(f"debug/croco_fatmap_ablation_ViTLarge_BaseDecoder/query_featmap_{extension}.png")
                 # -- end vis for debug
 
                 times["feat_extract"] = timer.elapsed("Time for feature extraction")
