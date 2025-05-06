@@ -1,10 +1,10 @@
 {
     "gen_templates_opts": {
-        "version": "test_upper_sphere",
+        "version": "best_upper_sphere",
         "object_dataset": "lmo",
-        "object_lids": [1],
+        "object_lids": [1,5,6,8,9,10,11,12],
         "num_viewspheres": 1,
-        "min_num_viewpoints": 200,
+        "min_num_viewpoints": 1593,
         "num_inplane_rotations": 1,
         "images_per_view": 1,
         "max_num_triangles": 20000,

@@ -126,11 +126,16 @@ def sample_views(
             azimuth += 2.0 * math.pi
 
         # Elevation from (-0.5 * pi, 0.5 * pi).
-        a = np.linalg.norm(pt)
-        b = np.linalg.norm([pt[0], pt[1], 0])
-        elev = math.acos(b / a)
-        if pt[2] < 0:
-            elev = -elev
+        #a = np.linalg.norm(pt)
+        #b = np.linalg.norm([pt[0], pt[1], 0])
+        #elev = math.acos(b / a)
+        #if pt[2] < 0:
+            #elev = -elev
+        
+        # New content (see commented above)
+        r = np.linalg.norm(pt)
+        elev = math.asin(pt[2] / r)
+        # End of new content
 
         if not (
             azimuth_range[0] <= azimuth <= azimuth_range[1]

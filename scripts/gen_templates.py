@@ -11,6 +11,8 @@ import cv2
 
 import numpy as np
 
+import math
+
 from bop_toolkit_lib import inout, dataset_params
 
 import bop_toolkit_lib.config as bop_config
@@ -153,37 +155,33 @@ def synthesize_templates(opts: GenTemplatesOpts) -> None:
         viewsphere_radii.append(min_depth + (depth_cell_id + 0.5) * depth_cell_size)
 
     # Generate viewpoints from which the object model will be rendered.
-    #views_sphere = []
-    #for radius in viewsphere_radii:
-        #views_sphere += foundpose_misc.sample_views(
-            #min_n_views=opts.min_num_viewpoints,
-            #radius=radius,
-            #mode="fibonacci",
-        #)[0]
-    #logger.info(f"Sampled points on the sphere: {len(views_sphere)}")
+    views_sphere = []
+    for radius in viewsphere_radii:
+        views_sphere += foundpose_misc.sample_views(
+            min_n_views=opts.min_num_viewpoints,
+            radius=radius,
+            elev_range=(0.0, 0.5 * math.pi),
+            mode="fibonacci"
+        )[0]
+    logger.info(f"Sampled points on the sphere: {len(views_sphere)}")
 
     # --- New Generate viewpoints and retrieve only those from the upper half-sphere.
+    '''
+    views_sphere = []
     for radius in viewsphere_radii:
         all_views, _ = foundpose_misc.sample_views(
             min_n_views=opts.min_num_viewpoints,
             radius=radius,
-            mode="fibonacci",
-        )
-        
-        # Filter views from upper hemisphere (camera is above the object)
-        views_sphere = [
-            v for v in all_views
-            if v["t"][2] > 0  # z > 0 means camera is above the object (looking down)
-        ]
+            mode="fibonacci"
+    )
 
-        # No rotation and no translation view
-        #R_identity = np.eye(3)
-        #t_zero = np.zeros(3)
-        #neutral_view = {
-            #"R": R_identity,
-            #"t": t_zero
-        #}
-        #views_sphere.append(neutral_view)
+    # Keep only upper hemisphere views
+    views_sphere += [
+        v for v in all_views
+        if v["t"][2] >= -0e-13
+    ]
+    print("debug")
+    '''
     # --- End New
 
     # Add in-plane rotations.
@@ -263,8 +261,8 @@ def synthesize_templates(opts: GenTemplatesOpts) -> None:
             )
             for _ in range(opts.images_per_view):
 
-                # if template_counter == 5:
-                #     break
+                #if template_counter == 5:
+                    #break
 
                 timer.start()
 

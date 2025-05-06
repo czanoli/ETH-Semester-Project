@@ -568,7 +568,7 @@ def infer(opts: InferOpts) -> None:
                 )
 
                 extension = opts.extractor_name.split("_")[-1]
-                Image.fromarray(feature_map).save(f"debug/croco_fatmap_ablation_ViTLarge_BaseDecoder/query_featmap_{extension}.png")
+                Image.fromarray(feature_map).save(f"debug/croco_fatmap_ablation_ViTLarge_BaseDecoder/onlySeg/query_featmap_{extension}.png")
                 # -- end vis for debug
 
                 times["feat_extract"] = timer.elapsed("Time for feature extraction")
