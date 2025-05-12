@@ -15,10 +15,10 @@ else:
     datasets_path = r"/path/to/bop/datasets"
 
 # Folder with pose results to be evaluated.
-results_path = r"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/inference/lmo_fit3d_layer9_upper_nopca"
+results_path = r"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/inference/lmo_fit3d_layer11_upper_nopca"
 
 # Folder for the calculated pose errors and performance scores.
-eval_path = r"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/inference/lmo_fit3d_layer9_upper_nopca"
+eval_path = r"/home/tatiana/chris-sem-prj/ETH-Semester-Project/bop_datasets/inference/lmo_fit3d_layer11_upper_nopca"
 
 ######## Extended ########
 
