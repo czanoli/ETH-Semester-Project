@@ -14,7 +14,7 @@ logger: logging.Logger = logging.get_logger()
 
 # Load the estimated poses from the json file
 object_dataset = "lmo"
-version = "best_lmo_obj1:322_decoder6_uppersphere"
+version = "fit3d_layer10_upper_nopca"
 object_lids = [1,5,6,8,9,10,11,12]
 
 signature = misc.slugify(object_dataset) + "_{}".format(version)

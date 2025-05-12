@@ -1,10 +1,10 @@
 {
     "gen_templates_opts": {
-        "version": "best_upper_sphere",
+        "version": "dino_best_upper_sphere_42tmplts",
         "object_dataset": "lmo",
         "object_lids": [1,5,6,8,9,10,11,12],
         "num_viewspheres": 1,
-        "min_num_viewpoints": 1593,
+        "min_num_viewpoints": 82,
         "num_inplane_rotations": 1,
         "images_per_view": 1,
         "max_num_triangles": 20000,
@@ -13,9 +13,9 @@
         "ssaa_factor": 4.0,
         "background_type": "black",
         "light_type": "multi_directional",
-        "features_patch_size": 16,
+        "features_patch_size": 14,
         "crop": true,
         "crop_rel_pad": 0.2,
-        "crop_size": [480, 480]
+        "crop_size": [420, 420]
     }
 }

@@ -1,0 +1,154 @@
+--- FiT3D:
+--- LMO, entireImage---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.07029757785467128
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.09238754325259516
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.23467128027681664
+INFO:eval_bop19_pose:- bop19_average_recall: 0.13245213379469437
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 1.4731082129478454
+INFO:eval_bop19_pose:Evaluation took 24.196563243865967s.
+INFO:eval_bop19_pose:Done.
+
+--- LMO, onlySegmented---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.18316955017301037
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.22269896193771627
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.4111418685121107
+INFO:eval_bop19_pose:- bop19_average_recall: 0.27233679354094575
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.568589391708374
+INFO:eval_bop19_pose:Evaluation took 25.48392915725708s.
+INFO:eval_bop19_pose:Done.
+
+--- LMO, onlySegmented, uppersphere, yesPCA---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.19328027681660898
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.2460207612456747
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.47411764705882353
+INFO:eval_bop19_pose:- bop19_average_recall: 0.30447289504036906
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 3.5089712178707124
+INFO:eval_bop19_pose:Evaluation took 27.424543380737305s.
+INFO:eval_bop19_pose:Done.
+
+--- LMO, onlySegmented, uppersphere, noPCA, layer 11---
+
+--- LMO, onlySegmented, uppersphere, noPCA, layer 10---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.024283737024221458
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.03681660899653979
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.1494809688581315
+INFO:eval_bop19_pose:- bop19_average_recall: 0.07019377162629759
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.495621575117111
+INFO:eval_bop19_pose:Evaluation took 30.79624581336975s.
+INFO:eval_bop19_pose:Done.
+
+
+--- LMO, onlySegmented, uppersphere, noPCA, layer 9---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.20633910034602077
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.25930795847750865
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.4871280276816609
+INFO:eval_bop19_pose:- bop19_average_recall: 0.3175916955017301
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.659888180494309
+INFO:eval_bop19_pose:Evaluation took 31.48946523666382s.
+INFO:eval_bop19_pose:Done.
+
+--- LMO, onlySegmented, uppersphere, noPCA, layer 8---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.15875432525951555
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.2108650519031142
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.44685121107266434
+INFO:eval_bop19_pose:- bop19_average_recall: 0.27215686274509804
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.349773690700531
+INFO:eval_bop19_pose:Evaluation took 31.118244886398315s.
+INFO:eval_bop19_pose:Done.
+
+
+--- LMO, onlySegmented, uppersphere, noPCA, layer 7---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.16955709342560554
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.21806228373702424
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.45107266435986154
+INFO:eval_bop19_pose:- bop19_average_recall: 0.27956401384083046
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.35903085231781
+INFO:eval_bop19_pose:Evaluation took 29.835246086120605s.
+INFO:eval_bop19_pose:Done.
+
+--- LMO, onlySegmented, uppersphere, noPCA, layer 6---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.18680276816608996
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.23294117647058826
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.447681660899654
+INFO:eval_bop19_pose:- bop19_average_recall: 0.2891418685121107
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.294602578878402
+INFO:eval_bop19_pose:Evaluation took 29.463515758514404s.
+INFO:eval_bop19_pose:Done.
+
+
+--- LMO, onlySegmented, uppersphere, noPCA, layer 5---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.18978546712802769
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.23993079584775087
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.44747404844290656
+INFO:eval_bop19_pose:- bop19_average_recall: 0.2923967704728951
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.390103149414062
+INFO:eval_bop19_pose:Evaluation took 29.480583906173706s.
+INFO:eval_bop19_pose:Done.
+
+
+--- LMO, onlySegmented, uppersphere, noPCA, layer 4---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.18939100346020765
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.23141868512110725
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.4367474048442907
+INFO:eval_bop19_pose:- bop19_average_recall: 0.28585236447520185
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.427434012889862
+INFO:eval_bop19_pose:Evaluation took 29.67484188079834s.
+INFO:eval_bop19_pose:Done.
+
+
+--- LMO, onlySegmented, uppersphere, noPCA, layer 3---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.16017993079584777
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.19162629757785468
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.3883737024221453
+INFO:eval_bop19_pose:- bop19_average_recall: 0.24672664359861593
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.316397294998169
+INFO:eval_bop19_pose:Evaluation took 30.161375999450684s.
+INFO:eval_bop19_pose:Done.
+
+
+--- LMO, onlySegmented, uppersphere, noPCA, layer 2---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.14596539792387545
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.18062283737024223
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.39273356401384085
+INFO:eval_bop19_pose:- bop19_average_recall: 0.23977393310265285
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.442872236967087
+INFO:eval_bop19_pose:Evaluation took 30.678322315216064s.
+INFO:eval_bop19_pose:Done.
+
+
+--- LMO, onlySegmented, uppersphere, noPCA, layer 1---
+
+
+[Vit Large Base Decoder, onlySeg, decoder=6, original templates, yes PCA, DPT]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.13395847750865053
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.15847750865051907
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.32089965397923875
+INFO:eval_bop19_pose:- bop19_average_recall: 0.20444521337946944
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 33.00958295226097
+INFO:eval_bop19_pose:Evaluation took 25.45333743095398s.
+INFO:eval_bop19_pose:Done.
+
+
+Vanilla FoundPOse Dino Base, layer 9
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.2604705882352942
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.3367474048442906
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.5871280276816608
+INFO:eval_bop19_pose:- bop19_average_recall: 0.39478200692041526
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.939762991666794
+INFO:eval_bop19_pose:Evaluation took 23.5419864654541s.
+INFO:eval_bop19_pose:Done.
+

@@ -1,8 +1,8 @@
 {
     "infer_opts": {
-        "version": "best_lmo_obj1:322_decoder6_uppersphere",
+        "version": "best_lmo_obj1:322_MSSD10_MSPD11_nopca",
         "object_dataset": "lmo",
-        "repre_version": "best_lmo_obj1:322_decoder6_uppersphere",
+        "repre_version": "best_lmo_obj1:322_MSSD10_MSPD11_nopca",
         "crop_rel_pad": 0.2,
         "crop_size": [
             480,

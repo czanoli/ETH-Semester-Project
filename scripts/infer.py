@@ -505,7 +505,7 @@ def infer(opts: InferOpts) -> None:
                     )
 
                     # --- start extractor with only masked object
-                    onlySeg = True
+                    onlySeg = False
                     if onlySeg:
                         print("\n\n !!!!!! ONLY SEGMENTATION !!!!!! \n\n")
                         assert mask_modal.ndim == 2, "Mask must be single-channel"

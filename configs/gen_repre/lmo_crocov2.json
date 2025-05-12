@@ -1,13 +1,13 @@
 {
     "gen_repre_opts": {
-        "version": "best_lmo_obj1:322_decoder6_uppersphere",
+        "version": "best_lmo_obj1:322_MSSD10_MSPD11_nopca",
         "use_dpt": false,
-        "templates_version": "best_upper_sphere",
+        "templates_version": "best_lmo_obj1:322_MSSD10_MSPD11",
         "object_dataset": "lmo",
         "object_lids": [1,5,6,8,9,10,11,12],
         "extractor_name": "crocov2_CroCo_V2_ViTLarge_BaseDecoder_decoder=6",
         "grid_cell_size": 16.0,
-        "apply_pca": true,
+        "apply_pca": false,
         "pca_components": 256,
         "cluster_features": true,
         "cluster_num": 2048,

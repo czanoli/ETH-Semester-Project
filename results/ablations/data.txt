@@ -1,0 +1,144 @@
+[Vit Large Base Decoder, onlySeg, original templates, yes PCA]
+[CroCo_V2_ViTLarge_BaseDecoder -- decoder 2]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.15402076124567476
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.16705882352941176
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.3263667820069204
+INFO:eval_bop19_pose:- bop19_average_recall: 0.2158154555940023
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 2.4870722603797915
+INFO:eval_bop19_pose:Evaluation took 25.182408571243286s.
+INFO:eval_bop19_pose:Done.
+
+[CroCo_V2_ViTLarge_BaseDecoder -- decoder 3]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.14965397923875431
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.16560553633217995
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.3244982698961938
+INFO:eval_bop19_pose:- bop19_average_recall: 0.21325259515570935
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 2.3279301810264585
+INFO:eval_bop19_pose:Evaluation took 21.061326026916504s.
+INFO:eval_bop19_pose:Done.
+
+[CroCo_V2_ViTLarge_BaseDecoder -- decoder 4]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.17159169550173012
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.19391003460207615
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.3597923875432526
+INFO:eval_bop19_pose:- bop19_average_recall: 0.24176470588235296
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 2.3722312831878662
+INFO:eval_bop19_pose:Evaluation took 24.013219118118286s.
+INFO:eval_bop19_pose:Done.
+
+[CroCo_V2_ViTLarge_BaseDecoder -- decoder 5]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.17131487889273356
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.19155709342560553
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.3545328719723183
+INFO:eval_bop19_pose:- bop19_average_recall: 0.23913494809688582
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 2.414563263654709
+INFO:eval_bop19_pose:Evaluation took 20.31881856918335s.
+INFO:eval_bop19_pose:Done.
+
+[CroCo_V2_ViTLarge_BaseDecoder -- decoder 6]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.1782975778546713
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.201522491349481
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.370242214532872
+INFO:eval_bop19_pose:- bop19_average_recall: 0.2500207612456748
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 2.393729635477066
+INFO:eval_bop19_pose:Evaluation took 21.944178104400635s.
+INFO:eval_bop19_pose:Done.
+
+[CroCo_V2_ViTLarge_BaseDecoder -- decoder 7]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.12937024221453286
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.14470588235294118
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.29681660899653983
+INFO:eval_bop19_pose:- bop19_average_recall: 0.1902975778546713
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 2.5033576667308806
+INFO:eval_bop19_pose:Evaluation took 22.814964294433594s.
+INFO:eval_bop19_pose:Done.
+
+[CroCo_V2_ViTLarge_BaseDecoder -- decoder 8]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.10569550173010382
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.11868512110726644
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.25750865051903116
+INFO:eval_bop19_pose:- bop19_average_recall: 0.16062975778546715
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 2.4415710842609406
+INFO:eval_bop19_pose:Evaluation took 20.645905017852783s.
+INFO:eval_bop19_pose:Done.
+
+[CroCo_V2_ViTLarge_BaseDecoder -- decoder 10]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.11301038062283737
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.12429065743944637
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.2570934256055363
+INFO:eval_bop19_pose:- bop19_average_recall: 0.16479815455594002
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 2.4095644092559816
+INFO:eval_bop19_pose:Evaluation took 23.85628628730774s.
+INFO:eval_bop19_pose:Done.
+
+
+-----------------------------------------------------------------------------------------
+[ViTLargeBaseDecoder, decoder=6, onlySeg, allSphere templates (798), yesPCA]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.16797923875432527
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.1950865051903114
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.37051903114186857
+INFO:eval_bop19_pose:- bop19_average_recall: 0.2445282583621684
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 6.687027950286865
+INFO:eval_bop19_pose:Evaluation took 22.946948051452637s.
+
+[ViTLargeBaseDecoder, decoder=6, onlySeg, allSphere templates (798), noPCA]
+[Vit Large Base Decoder, decoder06, onlySeg, original, no PCA]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.16032525951557094
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.18761245674740484
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.3689965397923875
+INFO:eval_bop19_pose:- bop19_average_recall: 0.23897808535178777
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 6.850221449136734
+INFO:eval_bop19_pose:Evaluation took 24.10298180580139s.
+INFO:eval_bop19_pose:Done.
+
+[ViTLargeBaseDecoder, decoder=6, onlySeg, upperSphere templates (798), yesPCA]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.19292733564013845
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.225121107266436
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.4036678200692042
+INFO:eval_bop19_pose:- bop19_average_recall: 0.2739054209919262
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 6.281392691135406
+INFO:eval_bop19_pose:Evaluation took 23.259764909744263s.
+INFO:eval_bop19_pose:Done.
+
+[ViTLargeBaseDecoder, decoder=6, onlySeg, upperSphere templates (798), noPCA]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.1917093425605536
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.22705882352941176
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.40788927335640135
+INFO:eval_bop19_pose:- bop19_average_recall: 0.27555247981545555
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 7.82379780292511
+INFO:eval_bop19_pose:Evaluation took 28.74154233932495s.
+INFO:eval_bop19_pose:Done.
+
+[ViTLargeBaseDecoder, decoder=6, onlySeg, CoOp templates (42), yesPCA]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.18368858131487886
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.22650519031141866
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.4377162629757786
+INFO:eval_bop19_pose:- bop19_average_recall: 0.28263667820069205
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 7.1553486764431
+INFO:eval_bop19_pose:Evaluation took 22.214745044708252s.
+INFO:eval_bop19_pose:Done.
+
+[ViTLargeBaseDecoder, decoder=6, onlySeg, CoOp templates (42), noPCA]
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.18378546712802765
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.22532871972318338
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.42692041522491353
+INFO:eval_bop19_pose:- bop19_average_recall: 0.2786782006920415
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 8.151667120456695
+INFO:eval_bop19_pose:Evaluation took 37.388006925582886s.
+INFO:eval_bop19_pose:Done.
+
+

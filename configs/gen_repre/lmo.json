@@ -1,10 +1,10 @@
 {
     "gen_repre_opts": {
-        "version": "vanilla_vitl14_18",
+        "version": "vanilla_vitb14_layer9",
         "templates_version": "v2",
         "object_dataset": "lmo",
         "object_lids": [1,5,6,8,9,10,11,12],
-        "extractor_name": "dinov2_version=vitl14_stride=14_facet=token_layer=18_logbin=0_norm=1",
+        "extractor_name": "dinov2_version=vitb14_stride=14_facet=token_layer=9_logbin=0_norm=1",
         "grid_cell_size": 14.0,
         "apply_pca": true,
         "pca_components": 256,
