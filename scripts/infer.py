@@ -315,7 +315,7 @@ def infer(opts: InferOpts) -> None:
             bop_im_id = item_info["im_id"]
             bop_chunk_id = item_info["scene_id"]
 
-            #if bop_chunk_id != 2 or bop_im_id != 36 or int(object_lid) != 9:
+            #if bop_chunk_id != 2 or bop_im_id != 322 or int(object_lid) != 1:
                 #continue
 
             # Get instance identifier if specified.
@@ -505,7 +505,7 @@ def infer(opts: InferOpts) -> None:
                     )
 
                     # --- start extractor with only masked object
-                    onlySeg = False
+                    onlySeg = True
                     if onlySeg:
                         print("\n\n !!!!!! ONLY SEGMENTATION !!!!!! \n\n")
                         assert mask_modal.ndim == 2, "Mask must be single-channel"
@@ -568,7 +568,7 @@ def infer(opts: InferOpts) -> None:
                 )
 
                 extension = opts.extractor_name.split("_")[-1]
-                Image.fromarray(feature_map).save(f"debug/croco_fatmap_ablation_ViTLarge_BaseDecoder/onlySeg/query_featmap_{extension}.png")
+                Image.fromarray(feature_map).save(f"debug/fit3d_featmap.png")
                 # -- end vis for debug
 
                 times["feat_extract"] = timer.elapsed("Time for feature extraction")
@@ -658,7 +658,7 @@ def infer(opts: InferOpts) -> None:
                 logger.info(
                     f"Number of corresp: {[len(c['coord_2d']) for c in corresp]}"
                 )
-
+                
                 # Estimate coarse poses from corespondences.
                 coarse_poses = []
                 for corresp_id, corresp_curr in enumerate(corresp):

@@ -27,7 +27,7 @@
             "console": "integratedTerminal",
             "args": [
                 "--opts-path",
-                "configs/infer/lmo_crocov2.json"
+                "configs/infer/lmo_fit3d.json"
             ],
             "python": "/home/tatiana/anaconda3/envs/foundpose_gpu/bin/python",
             "env":{

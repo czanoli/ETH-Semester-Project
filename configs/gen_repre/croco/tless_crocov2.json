@@ -1,0 +1,18 @@
+{
+    "gen_repre_opts": {
+        "version": "",
+        "use_dpt": false,
+        "templates_version": "best_lmo_obj1:322_MSSD10_MSPD11",
+        "object_dataset": "tless",
+        "object_lids": [1,5,6,8,9,10,11,12],
+        "extractor_name": "crocov2_CroCo_V2_ViTLarge_BaseDecoder_decoder=6",
+        "grid_cell_size": 16.0,
+        "apply_pca": false,
+        "pca_components": 256,
+        "cluster_features": true,
+        "cluster_num": 2048,
+        "template_desc_opts": {
+            "desc_type": "tfidf"
+        }
+    }
+}

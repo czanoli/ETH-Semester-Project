@@ -1,8 +1,8 @@
 {
     "infer_opts": {
-        "version": "fit3d_layer9_upper_nopca",
-        "object_dataset": "lmo",
-        "repre_version": "fit3d_layer9_upper_nopca",
+        "version": "ycbv_fit3d_layer9_upper_nopca",
+        "object_dataset": "ycbv",
+        "repre_version": "ycbv_fit3d_layer9_upper_nopca",
         "crop_rel_pad": 0.2,
         "crop_size": [
             420,

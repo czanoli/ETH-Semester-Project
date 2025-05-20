@@ -55,6 +55,7 @@ class DinoFeatureExtractor(nn.Module):
         self.facet: str = "token"
         self.layer: int = 9
         self.apply_norm: bool = True
+        self.is_featup: bool = False
 
         # Parse the model name.
         name_items = model_name.split("_")
@@ -158,6 +159,13 @@ class DinoFeatureExtractor(nn.Module):
         feature_maps = patch_tokens.reshape(
             bsz, num_patches[1], num_patches[0], d
         ).permute(0, 3, 1, 2)
+
+        print("ciao")
+
+        if self.is_featup:
+            upsampler = torch.hub.load("mhamilton723/FeatUp", 'dinov2', use_norm=True).to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
+            hr_feats = upsampler(feature_maps)
+            print("ciao")
 
         return {
             "cls_tokens": cls_tokens[:, 0, :],  # BxD

@@ -1,0 +1,17 @@
+{
+    "gen_repre_opts": {
+        "version": "ycbv_fit3d_layer9_upper_nopca",
+        "templates_version": "ycbv_dino_best_upper_sphere_42tmplts",
+        "object_dataset": "ycbv",
+        "object_lids": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],
+        "extractor_name": "dinov2_version=dinov2:base:fine_stride=14_facet=token_layer=9_logbin=0_norm=1",
+        "grid_cell_size": 14.0,
+        "apply_pca": false,
+        "pca_components": 256,
+        "cluster_features": true,
+        "cluster_num": 120,
+        "template_desc_opts": {
+            "desc_type": "tfidf"
+        }
+    }
+}

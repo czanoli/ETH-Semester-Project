@@ -1,0 +1,84 @@
+--- LMO, onlySegmented, uppersphere, noPCA, layer 10---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.024283737024221458
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.03681660899653979
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.1494809688581315
+INFO:eval_bop19_pose:- bop19_average_recall: 0.07019377162629759
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.495621575117111
+INFO:eval_bop19_pose:Evaluation took 30.79624581336975s.
+INFO:eval_bop19_pose:Done.
+
+--- LMO, onlySegmented, uppersphere, noPCA, layer 9---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.20633910034602077
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.25930795847750865
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.4871280276816609
+INFO:eval_bop19_pose:- bop19_average_recall: 0.3175916955017301
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.659888180494309
+INFO:eval_bop19_pose:Evaluation took 31.48946523666382s.
+INFO:eval_bop19_pose:Done.
+
+--- LMO, onlySegmented, uppersphere, noPCA, layer 6---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.18680276816608996
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.23294117647058826
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.447681660899654
+INFO:eval_bop19_pose:- bop19_average_recall: 0.2891418685121107
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.294602578878402
+INFO:eval_bop19_pose:Evaluation took 29.463515758514404s.
+INFO:eval_bop19_pose:Done.
+
+--- LMO, onlySegmented, uppersphere, noPCA, layer 3---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.16017993079584777
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.19162629757785468
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.3883737024221453
+INFO:eval_bop19_pose:- bop19_average_recall: 0.24672664359861593
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.316397294998169
+INFO:eval_bop19_pose:Evaluation took 30.161375999450684s.
+INFO:eval_bop19_pose:Done.
+
+
+______________________________________________________________________________________
+
+--- LMO, onlySegmented, uppersphere, yePCA, layer 9---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.19328027681660898
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.2460207612456747
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.47411764705882353
+INFO:eval_bop19_pose:- bop19_average_recall: 0.30447289504036906
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 3.5089712178707124
+INFO:eval_bop19_pose:Evaluation took 27.424543380737305s.
+INFO:eval_bop19_pose:Done.
+
+______________________________________________________________________________________
+
+
+--- LMO, onlySegmented, allTemplates, noPCA, layer 9 ---
+TODO
+
+
+########################################################################################
+
+--- TLESS, onlySegmented, uppersphere, noPCA, layer 9 ---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.17927915304374903
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.1813482796201152
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.2935699828740464
+INFO:eval_bop19_pose:- bop19_average_recall: 0.21806580517930355
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 3.205498193351316
+INFO:eval_bop19_pose:Evaluation took 258.24437832832336s.
+INFO:eval_bop19_pose:Done.
+
+
+########################################################################################
+
+--- YCBV, onlySegmented, uppersphere, noPCA, layer 9 ---
+INFO:eval_bop19_pose:FINAL SCORES:
+INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.26608780014552513
+INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.272228959495513
+INFO:eval_bop19_pose:- bop19_average_recall_mspd: 0.40931360659713806
+INFO:eval_bop19_pose:- bop19_average_recall: 0.31587678874605873
+INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.022277828322516
+INFO:eval_bop19_pose:Evaluation took 103.93633651733398s.
+INFO:eval_bop19_pose:Done.

@@ -30,7 +30,6 @@ INFO:eval_bop19_pose:Evaluation took 27.424543380737305s.
 INFO:eval_bop19_pose:Done.
 
 
-
 --- LMO, onlySegmented, uppersphere, noPCA, layer 11---
 INFO:eval_bop19_pose:FINAL SCORES:
 INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.004892733564013841
@@ -150,6 +149,9 @@ INFO:eval_bop19_pose:Evaluation took 23.637141704559326s.
 INFO:eval_bop19_pose:Done.
 
 
+
+
+-------------- croco
 [Vit Large Base Decoder, onlySeg, decoder=6, original templates, yes PCA, DPT]
 INFO:eval_bop19_pose:FINAL SCORES:
 INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.13395847750865053
@@ -171,3 +173,7 @@ INFO:eval_bop19_pose:- bop19_average_time_per_image: 4.939762991666794
 INFO:eval_bop19_pose:Evaluation took 23.5419864654541s.
 INFO:eval_bop19_pose:Done.
 
+
+
+
+----

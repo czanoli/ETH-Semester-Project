@@ -91,6 +91,7 @@ export PYTHONPATH=$REPO_PATH:$REPO_PATH/external/bop_toolkit:$REPO_PATH/external
 - Activate it by running `conda activate foundpose_gpu`
 
 Now you can create the object representation using the following script and configuration file (e.g., for the LM-O dataset):
+
 ```
 python scripts/gen_repre.py --opts-path configs/gen_repre/lmo.json
 ```
