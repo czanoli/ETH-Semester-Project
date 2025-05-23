@@ -41,7 +41,7 @@ INFO:eval_bop19_pose:Done.
 
 ______________________________________________________________________________________
 
---- LMO, onlySegmented, uppersphere, yePCA, layer 9---
+--- LMO, onlySegmented, uppersphere, yesPCA, layer 9---
 INFO:eval_bop19_pose:FINAL SCORES:
 INFO:eval_bop19_pose:- bop19_average_recall_vsd: 0.19328027681660898
 INFO:eval_bop19_pose:- bop19_average_recall_mssd: 0.2460207612456747

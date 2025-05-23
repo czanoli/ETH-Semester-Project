@@ -1,16 +1,16 @@
 {
     "gen_repre_opts": {
-        "version": "best_lmo_obj1:322_MSSD10_MSPD11_nopca",
+        "version": "ycbv_croco_dec6_upper_yespca",
         "use_dpt": false,
-        "templates_version": "best_lmo_obj1:322_MSSD10_MSPD11",
-        "object_dataset": "lmo",
-        "object_lids": [1,5,6,8,9,10,11,12],
+        "templates_version": "ycbv_croco_best_upper_sphere_42tmplts",
+        "object_dataset": "ycbv",
+        "object_lids": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],
         "extractor_name": "crocov2_CroCo_V2_ViTLarge_BaseDecoder_decoder=6",
         "grid_cell_size": 16.0,
-        "apply_pca": false,
+        "apply_pca": true,
         "pca_components": 256,
         "cluster_features": true,
-        "cluster_num": 2048,
+        "cluster_num": 120,
         "template_desc_opts": {
             "desc_type": "tfidf"
         }
