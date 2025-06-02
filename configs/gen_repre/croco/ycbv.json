@@ -1,6 +1,6 @@
 {
     "gen_repre_opts": {
-        "version": "ycbv_croco_dec6_upper_yespca",
+        "version": "ycbv_croco_dec6_uppersphere_yesPCA_noDPT",
         "use_dpt": false,
         "templates_version": "ycbv_croco_best_upper_sphere_42tmplts",
         "object_dataset": "ycbv",
@@ -10,7 +10,7 @@
         "apply_pca": true,
         "pca_components": 256,
         "cluster_features": true,
-        "cluster_num": 120,
+        "cluster_num": 2048,
         "template_desc_opts": {
             "desc_type": "tfidf"
         }

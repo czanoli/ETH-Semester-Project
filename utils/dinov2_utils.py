@@ -160,7 +160,7 @@ class DinoFeatureExtractor(nn.Module):
             bsz, num_patches[1], num_patches[0], d
         ).permute(0, 3, 1, 2)
 
-        print("ciao")
+        #print("ciao")
 
         if self.is_featup:
             upsampler = torch.hub.load("mhamilton723/FeatUp", 'dinov2', use_norm=True).to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))

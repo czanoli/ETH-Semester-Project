@@ -301,11 +301,18 @@ def generate_repre(
         timer.start()
 
         logger.info(f"Clustering features into {opts.cluster_num} visual words...")
-        centroids, cluster_ids, centroid_distances = cluster_util.kmeans(
-            samples=feat_vectors,
-            num_centroids=opts.cluster_num,
-            verbose=True,
-        )
+        if opts.cluster_num > feat_vectors.shape[0]:
+                centroids, cluster_ids, centroid_distances = cluster_util.kmeans(
+                samples=feat_vectors,
+                num_centroids=feat_vectors.shape[0],
+                verbose=True,
+            )
+        else:
+            centroids, cluster_ids, centroid_distances = cluster_util.kmeans(
+                samples=feat_vectors,
+                num_centroids=opts.cluster_num,
+                verbose=True,
+            )
 
         # Store the clustering results in the object repre.
         repre.feat_cluster_centroids = centroids

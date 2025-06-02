@@ -1,8 +1,8 @@
 {
     "infer_opts": {
-        "version": "ycbv_fit3d_layer9_upper_nopca",
+        "version": "ycbv_fit3d_layer9_uppersphere_noPCA",
         "object_dataset": "ycbv",
-        "repre_version": "ycbv_fit3d_layer9_upper_nopca",
+        "repre_version": "ycbv_fit3d_layer9_uppersphere_noPCA",
         "crop_rel_pad": 0.2,
         "crop_size": [
             420,

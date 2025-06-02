@@ -13,9 +13,9 @@ from utils import misc, logging, json_util
 logger: logging.Logger = logging.get_logger()
 
 # Load the estimated poses from the json file
-object_dataset = "lmo"
-version = "lmo_croco_dec6_uppersphere_yesPCA_yesDPT"
-object_lids = [1,5,6,8,9,10,11,12]
+object_dataset = "ycbv"
+version = "ycbv_fit3d_layer9_uppersphere_noPCA"
+object_lids = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
 
 signature = misc.slugify(object_dataset) + "_{}".format(version)
 output_dir = os.path.join(

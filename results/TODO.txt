@@ -697,3 +697,14 @@ INFO:eval_bop19_pose:- bop19_average_time_per_image: 6.281392691135406
 INFO:eval_bop19_pose:Evaluation took 23.259764909744263s.
 INFO:eval_bop19_pose:Done.
 
+
+----------------------------------------------
+python scripts/gen_repre.py --opts-path configs/gen_repre/croco/tless.json
+python scripts/gen_repre.py --opts-path configs/gen_repre/croco/ycbv.json
+python scripts/gen_repre.py --opts-path configs/gen_repre/fit3d/tless.json
+python scripts/gen_repre.py --opts-path configs/gen_repre/fit3d/ycbv.json
+
+python scripts/infer.py --opts-path configs/infer/croco/tless.json
+python scripts/infer.py --opts-path configs/infer/croco/ycbv.json
+python scripts/infer.py --opts-path configs/infer/fit3d/tless.json
+python scripts/infer.py --opts-path configs/infer/fit3d/ycbv.json

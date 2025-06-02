@@ -1,7 +1,7 @@
 {
     "gen_repre_opts": {
-        "version": "lmo_croco_dec6_uppersphere_yesPCA_yesDPT",
-        "use_dpt": true,
+        "version": "lmo_croco_dec6_uppersphere_yesPCA_noDPT",
+        "use_dpt": false,
         "templates_version": "best_upper_sphere_42tmplts",
         "object_dataset": "lmo",
         "object_lids": [1,5,6,8,9,10,11,12],

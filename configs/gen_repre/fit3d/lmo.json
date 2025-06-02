@@ -1,6 +1,6 @@
 {
     "gen_repre_opts": {
-        "version": "fit3d_layer9_upper_nopca",
+        "version": "lmo_fit3d_layer9_uppersphere_noPCA",
         "templates_version": "dino_best_upper_sphere_42tmplts",
         "object_dataset": "lmo",
         "object_lids": [1,5,6,8,9,10,11,12],

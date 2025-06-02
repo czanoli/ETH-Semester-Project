@@ -1,8 +1,8 @@
 {
     "infer_opts": {
-        "version": "ycbv_croco_dec6_upper_yespca",
+        "version": "ycbv_croco_dec6_uppersphere_yesPCA_noDPT",
         "object_dataset": "ycbv",
-        "repre_version": "ycbv_croco_dec6_upper_yespca",
+        "repre_version": "ycbv_croco_dec6_uppersphere_yesPCA_noDPT",
         "crop_rel_pad": 0.2,
         "crop_size": [
             480,
