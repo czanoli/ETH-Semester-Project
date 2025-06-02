@@ -2,3 +2,4 @@ bop_datasets/
 fit3d_checkpoints/
 croco_pretrained_models/
 external/crocov2/stereoflow_models/*
+.vscode/
