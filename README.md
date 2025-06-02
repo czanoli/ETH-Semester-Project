@@ -150,12 +150,3 @@ Download the CroCov2 checkpoints:
 - `./scripts/get_croco_checkpoints.sh`
 
 The CroCov2 checkpoints will be saved into the `croco_pretrained_models` folder.
-
-
-## [OLD:]
-### DINOv2 Checkpoints <a name="dino-checkpoints"></a>
-Download the DINOv2 checkpoints from 3DFiT:
-- `chmod +x scripts/get_dino_checkpoints.sh`
-- `./scripts/get_dino_checkpoints.sh`
-
-The DINOv2 checkpoints from [FiT3D](https://huggingface.co/yuanwenyue/FiT3D/tree/main) will be saved into the `dino_checkpoints` folder.
